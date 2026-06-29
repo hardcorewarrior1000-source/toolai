@@ -160,7 +160,21 @@ const TIER_KEY = "toolai_tier";
 export function getCurrentTier(): Tier {
   if (typeof window === "undefined") return tiers[0];
   const tierId = localStorage.getItem(TIER_KEY) || "free";
-  return getTier(tierId);
+  const tier = getTier(tierId);
+  if (tier.id !== "free") {
+    const licRaw = localStorage.getItem("toolai_license");
+    if (licRaw) {
+      try {
+        const lic = JSON.parse(licRaw);
+        if (new Date(lic.expiresAt) < new Date()) {
+          localStorage.removeItem("toolai_license");
+          localStorage.setItem(TIER_KEY, "free");
+          return tiers[0];
+        }
+      } catch {}
+    }
+  }
+  return tier;
 }
 
 export function setCurrentTier(tierId: string) {

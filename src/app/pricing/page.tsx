@@ -1,11 +1,32 @@
 "use client";
 
+import { useState } from "react";
 import { tiers } from "@/lib/subscription";
 import { useSubscription } from "@/components/SubscriptionProvider";
+import { WALLETS, type Chain, getAmountForTier } from "@/lib/crypto-verify";
+import { getLicense, clearLicense, type LicenseData } from "@/lib/license";
 import AdBanner from "@/components/AdBanner";
+import Link from "next/link";
 
 export default function PricingPage() {
-  const { tier: currentTier, setTier } = useSubscription();
+  const { tier: currentTier, setTier, refresh } = useSubscription();
+  const [selectedTier, setSelectedTier] = useState<string | null>(null);
+  const [chain, setChain] = useState<Chain>("solana");
+  const [copied, setCopied] = useState("");
+
+  const license: LicenseData | null = typeof window !== "undefined" ? getLicense() : null;
+
+  const handleCopy = (text: string, label: string) => {
+    navigator.clipboard.writeText(text);
+    setCopied(label);
+    setTimeout(() => setCopied(""), 2000);
+  };
+
+  const handleClear = () => {
+    clearLicense();
+    setTier("free");
+    refresh();
+  };
 
   return (
     <div className="max-w-6xl mx-auto px-4 py-12">
@@ -14,15 +35,35 @@ export default function PricingPage() {
           Simple, Transparent <span className="text-emerald-400">Pricing</span>
         </h1>
         <p className="text-zinc-400 text-lg max-w-2xl mx-auto">
-          Start free, upgrade when you need more. No hidden fees. Cancel anytime.
+          Start free, upgrade with crypto. No bank account needed. Pay with SOL, ETH, or BTC.
         </p>
       </section>
+
+      {license && (
+        <div className="bg-emerald-950/50 border border-emerald-800 rounded-xl p-6 mb-8 max-w-2xl mx-auto">
+          <div className="flex items-center justify-between mb-2">
+            <h2 className="text-lg font-semibold text-emerald-300">Active Subscription</h2>
+            <button
+              onClick={handleClear}
+              className="text-xs text-zinc-500 hover:text-red-400 transition-colors"
+            >
+              Cancel
+            </button>
+          </div>
+          <div className="flex gap-4 text-sm text-zinc-400">
+            <span>Plan: <span className="text-zinc-200 font-medium">{tiers.find(t => t.id === license.tier)?.name}</span></span>
+            <span>Key: <span className="font-mono text-emerald-400">{license.key}</span></span>
+            <span>Expires: <span className="text-zinc-200">{new Date(license.expiresAt).toLocaleDateString()}</span></span>
+          </div>
+        </div>
+      )}
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 mb-12">
         {tiers.map((t) => {
           const isActive = currentTier.id === t.id;
           const isFree = t.price === 0;
           const isPopular = t.id === "pro";
+          const isSelected = selectedTier === t.id;
 
           return (
             <div
@@ -67,22 +108,97 @@ export default function PricingPage() {
                 >
                   Current Plan
                 </button>
-              ) : (
+              ) : isFree ? (
                 <button
                   onClick={() => setTier(t.id)}
+                  className="w-full py-2.5 rounded-lg text-sm font-semibold bg-zinc-800 hover:bg-zinc-700 text-zinc-300 transition-colors"
+                >
+                  Get Started
+                </button>
+              ) : (
+                <button
+                  onClick={() => setSelectedTier(isSelected ? null : t.id)}
                   className={`w-full py-2.5 rounded-lg text-sm font-semibold transition-colors ${
                     isPopular
                       ? "bg-emerald-500 hover:bg-emerald-400 text-black"
                       : "bg-zinc-800 hover:bg-zinc-700 text-zinc-300"
                   }`}
                 >
-                  {isFree ? "Get Started" : `Upgrade to ${t.name}`}
+                  {isSelected ? "Hide" : `Pay with Crypto`}
                 </button>
               )}
             </div>
           );
         })}
       </div>
+
+      {selectedTier && (
+        <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-6 mb-12 max-w-2xl mx-auto">
+          <h2 className="text-lg font-semibold text-white mb-4">
+            Pay for {tiers.find(t => t.id === selectedTier)?.name} plan
+          </h2>
+
+          <div className="flex gap-2 mb-4">
+            {(["solana", "ethereum", "bitcoin"] as Chain[]).map((c) => (
+              <button
+                key={c}
+                onClick={() => setChain(c)}
+                className={`flex-1 p-3 rounded-lg border text-center transition-colors ${
+                  chain === c
+                    ? "border-emerald-500 bg-emerald-500/10 text-emerald-400"
+                    : "border-zinc-700 bg-zinc-800 text-zinc-400 hover:border-zinc-600"
+                }`}
+              >
+                <span className="text-xl block">{WALLETS[c].icon}</span>
+                <span className="text-xs font-medium">{WALLETS[c].label}</span>
+              </button>
+            ))}
+          </div>
+
+          <div className="bg-zinc-950 border border-zinc-700 rounded-lg p-4 mb-4">
+            <p className="text-xs text-zinc-500 mb-1">Send exactly:</p>
+            <p className="font-mono text-lg text-emerald-400 font-bold">
+              {getAmountForTier(selectedTier, chain)} {WALLETS[chain].label}
+            </p>
+          </div>
+
+          <div className="bg-zinc-950 border border-zinc-700 rounded-lg p-4 mb-4">
+            <p className="text-xs text-zinc-500 mb-2">To this address:</p>
+            <div className="flex items-center gap-2">
+              <p className="font-mono text-xs text-emerald-400 break-all flex-1 leading-relaxed">
+                {WALLETS[chain].address}
+              </p>
+              <button
+                onClick={() => handleCopy(WALLETS[chain].address, "address")}
+                className="shrink-0 px-3 py-1.5 bg-zinc-800 hover:bg-zinc-700 text-zinc-300 rounded text-xs transition-colors"
+              >
+                {copied === "address" ? "Copied!" : "Copy"}
+              </button>
+            </div>
+          </div>
+
+          <div className="bg-zinc-950 border border-zinc-700 rounded-lg p-4 mb-4">
+            <p className="text-xs text-zinc-500 mb-1">Or send any amount (auto-detects tier):</p>
+            <div className="grid grid-cols-3 gap-2 mt-2">
+              {["starter", "pro", "business", "enterprise"].filter(t => t !== "free").map((tierId) => (
+                <div key={tierId} className="text-center">
+                  <p className="text-[10px] text-zinc-500 capitalize">{tierId}</p>
+                  <p className="font-mono text-[10px] text-zinc-400">
+                    {getAmountForTier(tierId, chain)} {WALLETS[chain].label}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <Link
+            href="/verify"
+            className="block w-full py-3 bg-emerald-500 hover:bg-emerald-400 text-black font-semibold rounded-lg text-center transition-colors"
+          >
+            I&apos;ve sent payment — Verify Now
+          </Link>
+        </div>
+      )}
 
       <section className="bg-zinc-900 border border-zinc-800 rounded-xl p-8 mb-12">
         <h2 className="text-2xl font-bold text-white mb-6 text-center">Feature Comparison</h2>
@@ -138,14 +254,6 @@ export default function PricingPage() {
                 <td className="text-center py-3 px-4 text-zinc-500">-</td>
                 <td className="text-center py-3 px-4 text-zinc-500">5 seats</td>
                 <td className="text-center py-3 px-4 text-emerald-400">Unlimited</td>
-              </tr>
-              <tr className="border-b border-zinc-800/50">
-                <td className="py-3 px-4 text-zinc-300">White-label Embeds</td>
-                <td className="text-center py-3 px-4 text-zinc-500">-</td>
-                <td className="text-center py-3 px-4 text-zinc-500">-</td>
-                <td className="text-center py-3 px-4 text-zinc-500">-</td>
-                <td className="text-center py-3 px-4 text-emerald-400">✓</td>
-                <td className="text-center py-3 px-4 text-emerald-400">✓</td>
               </tr>
               <tr>
                 <td className="py-3 px-4 text-zinc-300">Custom Branding</td>

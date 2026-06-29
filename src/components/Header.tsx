@@ -26,6 +26,7 @@ export default function Header() {
           <Link href="/tools/qr-generator" className="hover:text-white transition-colors whitespace-nowrap">QR</Link>
           <Link href="/tools/image-to-prompt" className="hover:text-white transition-colors whitespace-nowrap">Img→Prompt</Link>
           <Link href="/pricing" className="hover:text-white transition-colors whitespace-nowrap">Pricing</Link>
+          <Link href="/verify" className="hover:text-white transition-colors whitespace-nowrap">Verify</Link>
           <Link href="/about" className="hover:text-white transition-colors whitespace-nowrap">About</Link>
         </nav>
 
@@ -54,6 +55,7 @@ export default function Header() {
           <Link href="/tools/json-formatter" onClick={() => setOpen(false)} className="hover:text-white">JSON Formatter</Link>
           <Link href="/tools/image-to-prompt" onClick={() => setOpen(false)} className="hover:text-white">Image to Prompt</Link>
           <Link href="/pricing" onClick={() => setOpen(false)} className="hover:text-white font-semibold text-emerald-400">Pricing</Link>
+          <Link href="/verify" onClick={() => setOpen(false)} className="hover:text-white">Verify Payment</Link>
           <Link href="/about" onClick={() => setOpen(false)} className="hover:text-white">About</Link>
         </div>
       )}
