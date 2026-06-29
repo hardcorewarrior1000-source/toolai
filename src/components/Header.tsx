@@ -2,16 +2,18 @@
 
 import Link from "next/link";
 import { useState, useEffect } from "react";
+import { usePathname } from "next/navigation";
 import { useSubscription } from "@/components/SubscriptionProvider";
 
 export default function Header() {
   const [open, setOpen] = useState(false);
   const { tier } = useSubscription();
   const [loggedIn, setLoggedIn] = useState(false);
+  const pathname = usePathname();
 
   useEffect(() => {
-    fetch("/api/auth/me").then((r) => r.ok && setLoggedIn(true)).catch(() => {});
-  }, []);
+    fetch("/api/auth/me").then((r) => { if (r.ok) setLoggedIn(true); else setLoggedIn(false); }).catch(() => setLoggedIn(false));
+  }, [pathname]);
 
   return (
     <header className="border-b border-zinc-800 bg-zinc-950/80 backdrop-blur-sm sticky top-0 z-50">
