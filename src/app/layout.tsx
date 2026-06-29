@@ -27,9 +27,24 @@ export const metadata: Metadata = {
       "Free online AI-powered tools: AI humanizer, color palette generator, gradient generator, QR code generator, and more.",
     type: "website",
   },
+  keywords: [
+    "AI tools",
+    "free online tools",
+    "AI humanizer",
+    "color palette generator",
+    "gradient generator",
+    "image to base64",
+    "word counter",
+    "QR code generator",
+    "image to prompt",
+    "text to slug",
+  ],
   robots: {
     index: true,
     follow: true,
+  },
+  verification: {
+    google: "YOUR_GOOGLE_SITE_VERIFICATION",
   },
 };
 
