@@ -25,6 +25,36 @@ const posts = [
     excerpt: "Discover how reverse prompt engineering works and how to use AI to describe images.",
     date: "2026-06-27",
   },
+  {
+    slug: "how-to-generate-secure-passwords-online",
+    title: "How to Generate Secure Passwords Online (And Why You Should)",
+    excerpt: "Weak passwords are the #1 cause of account breaches. Learn how to create uncrackable passwords with free online tools.",
+    date: "2026-07-05",
+  },
+  {
+    slug: "format-json-online-free",
+    title: "How to Format JSON Online — Free Tool for Developers",
+    excerpt: "Messy JSON making your life hard? Here's how to format, validate, and minify JSON in seconds with a free browser tool.",
+    date: "2026-07-01",
+  },
+  {
+    slug: "what-is-a-qr-code",
+    title: "What Is a QR Code? How QR Codes Work and How to Make One for Free",
+    excerpt: "QR codes are everywhere. Learn how they work, what they're used for, and how to create your own for free.",
+    date: "2026-06-25",
+  },
+  {
+    slug: "best-free-online-tools-developers-2026",
+    title: "Best Free Online Tools for Developers (2026)",
+    excerpt: "From JSON formatters to base64 converters — the essential free browser-based tools every developer needs.",
+    date: "2026-06-20",
+  },
+  {
+    slug: "convert-image-to-base64-string",
+    title: "How to Convert an Image to Base64 String Online",
+    excerpt: "Need to embed images in HTML or CSS? Learn how to convert any image to a Base64 data URL with a free tool.",
+    date: "2026-06-15",
+  },
 ];
 
 export default function BlogPage() {

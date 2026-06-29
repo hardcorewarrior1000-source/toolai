@@ -38,6 +38,69 @@ const posts: Record<string, { title: string; date: string; content: string[] }> 
       "At ToolAI, we're building tools to make this process accessible to everyone. Whether you're analyzing an image for SEO, accessibility, or creative inspiration, understanding Image to Prompt opens up new possibilities for how we interact with visual content.",
     ],
   },
+  "how-to-generate-secure-passwords-online": {
+    title: "How to Generate Secure Passwords Online (And Why You Should)",
+    date: "2026-07-05",
+    content: [
+      "Every year, billions of accounts are compromised due to weak or reused passwords. If you're still using your pet's name or a birthday as your password, it's time to level up your security — and free online tools make it easy.",
+      "Why Random Passwords Matter: Brute-force attacks can crack an 8-character lowercase password in minutes. A 16-character password with mixed case, numbers, and symbols would take centuries. The difference is entirely in the complexity and length.",
+      "What Makes a Good Password: Length is king. A 20-character password with moderate complexity beats a short one with special characters. Use uppercase and lowercase letters, numbers, and symbols. Avoid dictionary words, names, and predictable patterns like '1234' or 'abcd'.",
+      "Using a Password Generator: ToolAI's free Password Generator creates cryptographically secure random passwords right in your browser. It uses the Web Crypto API (crypto.getRandomValues) — the same randomness source used by browsers for HTTPS connections. Nothing is ever sent to a server.",
+      "Best Practices: Use a unique password for every account. Store them in a password manager (Bitwarden, 1Password, or KeePass). Enable two-factor authentication wherever possible. Never share passwords via email or chat. Rotate passwords for critical accounts every 6–12 months.",
+      "Try it now: Generate a secure password with ToolAI's free Password Generator — no signup, no tracking, completely local.",
+    ],
+  },
+  "format-json-online-free": {
+    title: "How to Format JSON Online — Free Tool for Developers",
+    date: "2026-07-01",
+    content: [
+      "JSON (JavaScript Object Notation) is the backbone of modern web development. APIs return JSON. Config files use JSON. But raw JSON from an API or minified code is often unreadable. Formatting it properly saves time and prevents errors.",
+      "Why Format JSON? Human-readable JSON is easier to debug. When you're troubleshooting an API response or reviewing a config file, properly indented JSON lets you spot issues at a glance. Formatted JSON also makes code reviews faster and reduces merge conflicts.",
+      "Manual Formatting vs. Tools: You could manually add line breaks and indentation, but that's tedious and error-prone. A single missing comma breaks everything. Free online JSON formatters handle this instantly — paste your JSON, click format, and get perfectly structured output.",
+      "Key Features to Look For: Pretty-print with configurable indentation (2 or 4 spaces). Minification to compress JSON for production. Validation to catch syntax errors before they break your app. Error messages that tell you exactly what went wrong and where.",
+      "ToolAI's JSON Formatter runs entirely in your browser — your data never leaves your device. Paste any JSON, choose format or minify, and copy the result. It handles nested objects, arrays, escaped strings, and even malformed JSON with helpful error messages.",
+      "Pro tip: Use JSON formatting in combination with URL encoding tools and base64 converters when working with APIs that require different data formats.",
+    ],
+  },
+  "what-is-a-qr-code": {
+    title: "What Is a QR Code? How QR Codes Work and How to Make One for Free",
+    date: "2026-06-25",
+    content: [
+      "QR codes — those square black-and-white patterns — are everywhere. Restaurants, concert tickets, payment apps, business cards, even gravestones. But what exactly is a QR code, and how do you create one?",
+      "What Is a QR Code? QR stands for 'Quick Response.' It's a type of 2D barcode invented in 1994 by Denso Wave (a Toyota subsidiary) to track vehicle parts during manufacturing. Unlike traditional barcodes that store data in one direction, QR codes store data in both horizontal and vertical dimensions — which is why they hold much more information.",
+      "How QR Codes Work: A QR code contains data encoded in a grid of black and white squares. The three large corner squares are 'finder patterns' that help scanners orient the code. The remaining squares encode the actual data — which can be a URL, text, contact info, Wi-Fi credentials, or even cryptocurrency addresses.",
+      "Error Correction: One clever feature of QR codes is built-in error correction. Even if up to 30% of the code is damaged or obscured, it can still be read. This is why you can add logos to QR codes and they still work.",
+      "Common Uses Today: Contactless payments (PromptPay in Thailand, Venmo in the US). Restaurant menus and ordering. Business card sharing. Wi-Fi password sharing. Event tickets and boarding passes. Product packaging and marketing.",
+      "Create Your Own: ToolAI's free QR Code Generator lets you create QR codes from any text or URL. Choose your error correction level, size, and download as a PNG. No signup required.",
+    ],
+  },
+  "best-free-online-tools-developers-2026": {
+    title: "Best Free Online Tools for Developers (2026)",
+    date: "2026-06-20",
+    content: [
+      "Every developer has a toolkit of go-to utilities. The best ones are free, fast, and work right in the browser. Here's our curated list of essential free online tools for developers in 2026.",
+      "JSON Formatter & Validator: Essential for API debugging. ToolAI's JSON Formatter lets you paste any JSON, format it with proper indentation, minify it for production, or validate syntax. Everything runs locally — your API keys and data never leave your browser.",
+      "Base64 Encoder/Decoder: From encoding images for inline CSS to decoding API responses, Base64 conversion comes up daily. ToolAI's Image to Base64 tool handles image encoding with a simple drag-and-drop interface, showing file size and output length.",
+      "QR Code Generator: Need a QR code for a WiFi network, a promotional URL, or an event? ToolAI's QR Generator supports multiple error correction levels and sizes — download a high-quality PNG in seconds.",
+      "URL Slug Generator: Clean URLs matter for SEO. ToolAI's Text to Slug converter transforms any text into a clean, hyphenated URL slug. Copy the result and use it in your next project.",
+      "Password Generator: Security matters. ToolAI's Password Generator uses cryptographic randomness (Web Crypto API) to create strong, unique passwords. Choose length, character types, and generate instantly.",
+      "Word Counter: Useful for content planning, documentation limits, or just checking your blog post length. ToolAI's Word Counter shows words, characters, sentences, paragraphs, and estimated reading/speaking time.",
+      "AI Humanizer: If you use AI for writing drafts, ToolAI's AI Humanizer converts robotic AI text into natural-sounding prose with 60+ transformation rules and three strength levels.",
+      "All these tools are free, require no signup, and process everything locally. Bookmark ToolAI and keep them in your developer toolkit.",
+    ],
+  },
+  "convert-image-to-base64-string": {
+    title: "How to Convert an Image to Base64 String Online",
+    date: "2026-06-15",
+    content: [
+      "Base64 encoding lets you represent binary data (like images) as plain text. This is incredibly useful for embedding images directly in HTML, CSS, or JSON — without needing a separate file upload.",
+      "What Is Base64? Base64 is a encoding scheme that converts binary data into 64 ASCII characters (A-Z, a-z, 0-9, +, /). A Base64-encoded image looks like a long string of random characters starting with 'data:image/png;base64,' or 'data:image/jpeg;base64,'.",
+      "When to Use It: Inline images in HTML emails (some email clients require it). Embedding small images in CSS (avoids extra HTTP requests). Storing images in JSON or databases as text. SVG alternatives for simple graphics. Data URIs for lightweight web pages.",
+      "When NOT to Use It: Base64 increases file size by about 33%. For large images, it's better to host them separately and use regular URLs. Base64 is ideal for small icons, logos, and decorative elements — not hero images or photos.",
+      "How to Convert: ToolAI's Image to Base64 tool makes it simple. Drag and drop any image (JPG, PNG, GIF, WebP), see a preview with file size info, and copy the complete data URL with one click. Everything processes in your browser — no uploads, no servers.",
+      "Pro tip: For production use, consider compressing your images first (use TinyPNG or similar) before converting to Base64 to minimize the data URI size.",
+    ],
+  },
 };
 
 export async function generateStaticParams() {

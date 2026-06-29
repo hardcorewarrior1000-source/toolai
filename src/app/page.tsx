@@ -50,6 +50,18 @@ const tools = [
     href: "/tools/image-to-prompt",
     icon: "🖼️",
   },
+  {
+    title: "Password Generator",
+    description: "Generate secure, cryptographically random passwords with custom length and character options.",
+    href: "/tools/password-generator",
+    icon: "🔐",
+  },
+  {
+    title: "JSON Formatter",
+    description: "Format, validate, and minify JSON data instantly with syntax error detection.",
+    href: "/tools/json-formatter",
+    icon: "{}",
+  },
 ];
 
 export default function Home() {
