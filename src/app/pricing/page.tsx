@@ -1,9 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { tiers } from "@/lib/subscription";
 import { useSubscription } from "@/components/SubscriptionProvider";
-import { WALLETS, type Chain, getAmountForTier } from "@/lib/crypto-verify";
+import { WALLETS, type Chain, fetchLivePrices, getAmountForTier } from "@/lib/crypto-verify";
 import { getLicense, clearLicense, type LicenseData } from "@/lib/license";
 import AdBanner from "@/components/AdBanner";
 import Link from "next/link";
@@ -13,8 +13,33 @@ export default function PricingPage() {
   const [selectedTier, setSelectedTier] = useState<string | null>(null);
   const [chain, setChain] = useState<Chain>("solana");
   const [copied, setCopied] = useState("");
+  const [amounts, setAmounts] = useState<Record<string, string>>({});
+  const [solPrice, setSolPrice] = useState(0);
+  const [ethPrice, setEthPrice] = useState(0);
+  const [btcPrice, setBtcPrice] = useState(0);
 
   const license: LicenseData | null = typeof window !== "undefined" ? getLicense() : null;
+
+  useEffect(() => {
+    fetchLivePrices().then((p) => {
+      setSolPrice(p.solana);
+      setEthPrice(p.ethereum);
+      setBtcPrice(p.bitcoin);
+    });
+  }, []);
+
+  useEffect(() => {
+    if (!selectedTier || !chain) return;
+    const load = async () => {
+      const tiers_list = ["starter", "pro", "business", "enterprise"];
+      const map: Record<string, string> = {};
+      for (const t of tiers_list) {
+        map[t] = await getAmountForTier(t, chain);
+      }
+      setAmounts(map);
+    };
+    load();
+  }, [selectedTier, chain]);
 
   const handleCopy = (text: string, label: string) => {
     navigator.clipboard.writeText(text);
@@ -50,7 +75,7 @@ export default function PricingPage() {
               Cancel
             </button>
           </div>
-          <div className="flex gap-4 text-sm text-zinc-400">
+          <div className="flex gap-4 text-sm text-zinc-400 flex-wrap">
             <span>Plan: <span className="text-zinc-200 font-medium">{tiers.find(t => t.id === license.tier)?.name}</span></span>
             <span>Key: <span className="font-mono text-emerald-400">{license.key}</span></span>
             <span>Expires: <span className="text-zinc-200">{new Date(license.expiresAt).toLocaleDateString()}</span></span>
@@ -134,9 +159,12 @@ export default function PricingPage() {
 
       {selectedTier && (
         <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-6 mb-12 max-w-2xl mx-auto">
-          <h2 className="text-lg font-semibold text-white mb-4">
+          <h2 className="text-lg font-semibold text-white mb-2">
             Pay for {tiers.find(t => t.id === selectedTier)?.name} plan
           </h2>
+          <p className="text-zinc-500 text-xs mb-4">
+            Live prices via CoinGecko. Amounts update every 5 minutes.
+          </p>
 
           <div className="flex gap-2 mb-4">
             {(["solana", "ethereum", "bitcoin"] as Chain[]).map((c) => (
@@ -151,6 +179,9 @@ export default function PricingPage() {
               >
                 <span className="text-xl block">{WALLETS[c].icon}</span>
                 <span className="text-xs font-medium">{WALLETS[c].label}</span>
+                <span className="text-[10px] text-zinc-500 block">
+                  ${c === "solana" ? solPrice.toFixed(2) : c === "ethereum" ? ethPrice.toFixed(0) : btcPrice.toLocaleString()}
+                </span>
               </button>
             ))}
           </div>
@@ -158,7 +189,7 @@ export default function PricingPage() {
           <div className="bg-zinc-950 border border-zinc-700 rounded-lg p-4 mb-4">
             <p className="text-xs text-zinc-500 mb-1">Send exactly:</p>
             <p className="font-mono text-lg text-emerald-400 font-bold">
-              {getAmountForTier(selectedTier, chain)} {WALLETS[chain].label}
+              {amounts[selectedTier] || "Loading..."} {WALLETS[chain].label}
             </p>
           </div>
 
@@ -178,14 +209,14 @@ export default function PricingPage() {
           </div>
 
           <div className="bg-zinc-950 border border-zinc-700 rounded-lg p-4 mb-4">
-            <p className="text-xs text-zinc-500 mb-1">Or send any amount (auto-detects tier):</p>
-            <div className="grid grid-cols-3 gap-2 mt-2">
-              {["starter", "pro", "business", "enterprise"].filter(t => t !== "free").map((tierId) => (
-                <div key={tierId} className="text-center">
-                  <p className="text-[10px] text-zinc-500 capitalize">{tierId}</p>
-                  <p className="font-mono text-[10px] text-zinc-400">
-                    {getAmountForTier(tierId, chain)} {WALLETS[chain].label}
-                  </p>
+            <p className="text-xs text-zinc-500 mb-2">All tiers ({WALLETS[chain].label}):</p>
+            <div className="grid grid-cols-2 gap-2">
+              {["starter", "pro", "business", "enterprise"].map((tierId) => (
+                <div key={tierId} className={`flex justify-between text-xs p-2 rounded ${tierId === selectedTier ? "bg-emerald-500/10 text-emerald-400" : "text-zinc-400"}`}>
+                  <span className="capitalize">{tierId}</span>
+                  <span className="font-mono">
+                    {amounts[tierId] || "..."} {WALLETS[chain].label}
+                  </span>
                 </div>
               ))}
             </div>
@@ -217,8 +248,8 @@ export default function PricingPage() {
             <tbody>
               <tr className="border-b border-zinc-800/50">
                 <td className="py-3 px-4 text-zinc-300">AI Tools (Humanizer, QR, Image to Prompt, etc.)</td>
-                <td className="text-center py-3 px-4 text-zinc-500">5/day</td>
-                <td className="text-center py-3 px-4 text-zinc-500">30/day</td>
+                <td className="text-center py-3 px-4 text-zinc-500">5,000/day</td>
+                <td className="text-center py-3 px-4 text-zinc-500">20,000/day</td>
                 <td className="text-center py-3 px-4 text-emerald-400">Unlimited</td>
                 <td className="text-center py-3 px-4 text-emerald-400">Unlimited</td>
                 <td className="text-center py-3 px-4 text-emerald-400">Unlimited</td>
@@ -246,14 +277,6 @@ export default function PricingPage() {
                 <td className="text-center py-3 px-4 text-zinc-500">-</td>
                 <td className="text-center py-3 px-4 text-emerald-400">✓</td>
                 <td className="text-center py-3 px-4 text-emerald-400">✓</td>
-              </tr>
-              <tr className="border-b border-zinc-800/50">
-                <td className="py-3 px-4 text-zinc-300">Team Seats</td>
-                <td className="text-center py-3 px-4 text-zinc-500">-</td>
-                <td className="text-center py-3 px-4 text-zinc-500">-</td>
-                <td className="text-center py-3 px-4 text-zinc-500">-</td>
-                <td className="text-center py-3 px-4 text-zinc-500">5 seats</td>
-                <td className="text-center py-3 px-4 text-emerald-400">Unlimited</td>
               </tr>
               <tr>
                 <td className="py-3 px-4 text-zinc-300">Custom Branding</td>

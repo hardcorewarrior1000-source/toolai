@@ -1,30 +1,98 @@
 export type Chain = "solana" | "ethereum" | "bitcoin";
 
-export const WALLETS: Record<Chain, { address: string; label: string; icon: string; usdPrice: number }> = {
+export const WALLETS: Record<Chain, { address: string; label: string; icon: string }> = {
   solana: {
     address: "BeS2p6srqB11aTAKCFazCTsCwhpeCZwQtfbBqegp3LsT",
     label: "SOL",
     icon: "◎",
-    usdPrice: 0.0055,
   },
   ethereum: {
     address: "0xAD99329d02c2cD485Dc86EF0E6FbaDCB0702b551",
     label: "ETH",
     icon: "Ξ",
-    usdPrice: 0.00033,
   },
   bitcoin: {
     address: "bc1q3h9a3q4axug2csc68858mnjtpqpv0zl9f930jr",
     label: "BTC",
     icon: "₿",
-    usdPrice: 0.0000167,
   },
 };
+
+const TIER_USD: Record<string, number> = {
+  starter: 5,
+  pro: 15,
+  business: 45,
+  enterprise: 99,
+};
+
+interface LivePrices {
+  solana: number;
+  ethereum: number;
+  bitcoin: number;
+  fetchedAt: number;
+}
+
+let cached: LivePrices | null = null;
+const CACHE_MS = 5 * 60 * 1000;
+
+export async function fetchLivePrices(): Promise<LivePrices> {
+  if (cached && Date.now() - cached.fetchedAt < CACHE_MS) return cached;
+  try {
+    const res = await fetch(
+      "https://api.coingecko.com/api/v3/simple/price?ids=solana,bitcoin,ethereum&vs_currencies=usd"
+    );
+    const data = await res.json();
+    cached = {
+      solana: data.solana?.usd || 0,
+      ethereum: data.ethereum?.usd || 0,
+      bitcoin: data.bitcoin?.usd || 0,
+      fetchedAt: Date.now(),
+    };
+  } catch {
+    if (!cached) {
+      cached = { solana: 100, ethereum: 2500, bitcoin: 60000, fetchedAt: 0 };
+    }
+  }
+  return cached;
+}
+
+export async function getAmountForTier(tierId: string, chain: Chain): Promise<string> {
+  const prices = await fetchLivePrices();
+  const usd = TIER_USD[tierId] || 0;
+  const pricePerUnit = prices[chain];
+  if (!pricePerUnit) return "0";
+  const amount = usd / pricePerUnit;
+  return amount < 0.0001 ? amount.toExponential(4) : amount.toFixed(6);
+}
+
+export async function getAmountForTierFormatted(tierId: string, chain: Chain): Promise<{ crypto: string; usd: number; unit: string }> {
+  const prices = await fetchLivePrices();
+  const usd = TIER_USD[tierId] || 0;
+  const pricePerUnit = prices[chain];
+  if (!pricePerUnit) return { crypto: "0", usd, unit: WALLETS[chain].label };
+  const amount = usd / pricePerUnit;
+  const crypto = amount < 0.0001 ? amount.toExponential(4) : amount.toFixed(6);
+  return { crypto, usd, unit: WALLETS[chain].label };
+}
+
+export async function detectTierFromTx(amount: number, chain: Chain): Promise<string> {
+  const prices = await fetchLivePrices();
+  const pricePerUnit = prices[chain];
+  if (!pricePerUnit) return "free";
+  const usdValue = amount * pricePerUnit;
+
+  if (usdValue >= 98) return "enterprise";
+  if (usdValue >= 44) return "business";
+  if (usdValue >= 14) return "pro";
+  if (usdValue >= 4) return "starter";
+  return "free";
+}
 
 export interface VerifyResult {
   success: boolean;
   tier?: string;
   amount?: number;
+  usdValue?: number;
   confirmations?: number;
   error?: string;
 }
@@ -51,7 +119,9 @@ export async function verifySolana(txHash: string): Promise<VerifyResult> {
       ? Math.abs((data.result.meta.postBalances?.[0] || 0) - (data.result.meta.preBalances?.[0] || 0))
       : 0;
     const sol = lamports / 1_000_000_000;
-    return { success: true, tier: detectTier(sol, "solana"), amount: sol, confirmations: 1 };
+    const prices = await fetchLivePrices();
+    const usdValue = sol * prices.solana;
+    return { success: true, tier: await detectTierFromTx(sol, "solana"), amount: sol, usdValue, confirmations: 1 };
   } catch {
     return { success: false, error: "Failed to verify Solana transaction" };
   }
@@ -73,7 +143,9 @@ export async function verifyEthereum(txHash: string): Promise<VerifyResult> {
     if (!data.result) return { success: false, error: "Transaction not found" };
     if (data.result.blockNumber === null) return { success: false, error: "Transaction pending" };
     const value = parseInt(data.result.value, 16) / 1e18;
-    return { success: true, tier: detectTier(value, "ethereum"), amount: value, confirmations: 1 };
+    const prices = await fetchLivePrices();
+    const usdValue = value * prices.ethereum;
+    return { success: true, tier: await detectTierFromTx(value, "ethereum"), amount: value, usdValue, confirmations: 1 };
   } catch {
     return { success: false, error: "Failed to verify Ethereum transaction" };
   }
@@ -86,29 +158,12 @@ export async function verifyBitcoin(txHash: string): Promise<VerifyResult> {
     const data = await res.json();
     if (data.status?.confirmed === false) return { success: false, error: "Transaction pending" };
     const value = data.vout?.reduce((sum: number, out: { value: number }) => sum + out.value, 0) / 1e8;
-    return { success: true, tier: detectTier(value || 0, "bitcoin"), amount: value, confirmations: 1 };
+    const prices = await fetchLivePrices();
+    const usdValue = (value || 0) * prices.bitcoin;
+    return { success: true, tier: await detectTierFromTx(value || 0, "bitcoin"), amount: value, usdValue, confirmations: 1 };
   } catch {
     return { success: false, error: "Failed to verify Bitcoin transaction" };
   }
-}
-
-function detectTier(amount: number, chain: Chain): string {
-  const usdThresholds: Record<string, number[]> = {
-    starter: [4],
-    pro: [14],
-    business: [44],
-    enterprise: [98],
-  };
-
-  const chainUsd = WALLETS[chain].usdPrice;
-  if (chainUsd === 0) return "free";
-  const usdValue = amount / chainUsd;
-
-  if (usdValue >= usdThresholds.enterprise[0]) return "enterprise";
-  if (usdValue >= usdThresholds.business[0]) return "business";
-  if (usdValue >= usdThresholds.pro[0]) return "pro";
-  if (usdValue >= usdThresholds.starter[0]) return "starter";
-  return "free";
 }
 
 export async function verifyTransaction(txHash: string, chain: Chain): Promise<VerifyResult> {
@@ -118,18 +173,4 @@ export async function verifyTransaction(txHash: string, chain: Chain): Promise<V
     case "bitcoin": return verifyBitcoin(txHash);
     default: return { success: false, error: "Unsupported chain" };
   }
-}
-
-export function getAmountForTier(tierId: string, chain: Chain): string {
-  const tierPrices: Record<string, number> = {
-    starter: 5,
-    pro: 15,
-    business: 45,
-    enterprise: 99,
-  };
-  const usd = tierPrices[tierId] || 0;
-  const unitPrice = WALLETS[chain].usdPrice;
-  if (unitPrice === 0) return "0";
-  const amount = usd * unitPrice;
-  return amount < 0.001 ? amount.toExponential(4) : amount.toFixed(6);
 }

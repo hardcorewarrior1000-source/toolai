@@ -1,7 +1,7 @@
 "use client";
 
-import { useState } from "react";
-import { verifyTransaction, type Chain, WALLETS, getAmountForTier } from "@/lib/crypto-verify";
+import { useState, useEffect } from "react";
+import { verifyTransaction, type Chain, WALLETS, getAmountForTier, fetchLivePrices } from "@/lib/crypto-verify";
 import { activateLicense, getLicense, clearLicense, type LicenseData } from "@/lib/license";
 import { useSubscription } from "@/components/SubscriptionProvider";
 import AdBanner from "@/components/AdBanner";
@@ -18,10 +18,27 @@ export default function VerifyPage() {
   const [chain, setChain] = useState<Chain>("solana");
   const [txHash, setTxHash] = useState("");
   const [verifying, setVerifying] = useState(false);
-  const [result, setResult] = useState<{ success: boolean; tier?: string; error?: string } | null>(null);
+  const [result, setResult] = useState<{ success: boolean; tier?: string; error?: string; usdValue?: number; amount?: number } | null>(null);
   const [license, setLicense] = useState<LicenseData | null>(null);
+  const [amounts, setAmounts] = useState<Record<string, string>>({});
+  const [prices, setPrices] = useState<{ solana: number; ethereum: number; bitcoin: number }>({ solana: 0, ethereum: 0, bitcoin: 0 });
 
   const existingLicense = typeof window !== "undefined" ? getLicense() : null;
+
+  useEffect(() => {
+    fetchLivePrices().then(setPrices);
+  }, []);
+
+  useEffect(() => {
+    const load = async () => {
+      const map: Record<string, string> = {};
+      for (const t of ["starter", "pro", "business", "enterprise"]) {
+        map[t] = await getAmountForTier(t, chain);
+      }
+      setAmounts(map);
+    };
+    load();
+  }, [chain]);
 
   const handleVerify = async () => {
     if (!txHash.trim()) return;
@@ -103,6 +120,9 @@ export default function VerifyPage() {
             >
               <span className="text-2xl block">{WALLETS[c].icon}</span>
               <span className="text-sm font-medium">{WALLETS[c].label}</span>
+              {prices[c] > 0 && (
+                <span className="text-[10px] text-zinc-500 block">${prices[c].toLocaleString()}</span>
+              )}
             </button>
           ))}
         </div>
@@ -119,14 +139,14 @@ export default function VerifyPage() {
             <div key={tierId} className="flex justify-between items-center text-zinc-400">
               <span>{TIER_NAMES[tierId]}</span>
               <span className="font-mono text-zinc-300">
-                {getAmountForTier(tierId, chain)} {WALLETS[chain].label}
+                {amounts[tierId] || "Loading..."} {WALLETS[chain].label}
               </span>
             </div>
           ))}
         </div>
 
         <p className="text-xs text-zinc-600">
-          License valid for 30 days from activation. Send at least the minimum amount for your chosen tier.
+          Live prices via CoinGecko. License valid for 30 days from activation.
         </p>
       </div>
 
@@ -164,6 +184,11 @@ export default function VerifyPage() {
               <p className="text-zinc-400 text-sm mb-2">
                 Your plan has been activated. Enjoy your upgraded access!
               </p>
+              {result.amount && result.usdValue !== undefined && (
+                <p className="text-zinc-500 text-xs mb-2">
+                  Detected: {result.amount} {WALLETS[chain].label} ≈ ${result.usdValue.toFixed(2)} USD
+                </p>
+              )}
               {license && (
                 <div className="bg-zinc-900 rounded-lg p-3 mt-3">
                   <p className="text-xs text-zinc-500 mb-1">Your license key:</p>
