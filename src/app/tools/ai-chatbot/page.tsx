@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect, type FormEvent } from "react";
 
-type Provider = "openai" | "gemini" | "opencode" | "custom";
+type Provider = "openai" | "openrouter" | "gemini" | "custom";
 
 interface Message {
   role: "user" | "assistant";
@@ -29,16 +29,21 @@ const PROVIDERS: Record<Provider, ProviderConfig> = {
     placeholder: "sk-...",
     keyPrefix: "sk-",
   },
-  opencode: {
-    name: "OpenCode",
+  openrouter: {
+    name: "OpenRouter",
     models: [
-      { id: "mimo-v2.5", name: "MiMo v2.5" },
-      { id: "mimo-v2", name: "MiMo v2" },
-      { id: "mimo-v1", name: "MiMo v1" },
+      { id: "meta-llama/llama-3.2-3b-instruct:free", name: "Llama 3.2 3B (Free)" },
+      { id: "nousresearch/hermes-3-llama-3.1-405b:free", name: "Hermes 3 405B (Free)" },
+      { id: "meta-llama/llama-3.1-8b-instruct:free", name: "Llama 3.1 8B (Free)" },
+      { id: "qwen/qwen-2.5-7b-instruct:free", name: "Qwen 2.5 7B (Free)" },
+      { id: "google/gemma-2-9b-it:free", name: "Gemma 2 9B (Free)" },
+      { id: "openai/gpt-4o-mini", name: "GPT-4o Mini (Paid)" },
+      { id: "openai/gpt-4o", name: "GPT-4o (Paid)" },
+      { id: "anthropic/claude-3-haiku", name: "Claude 3 Haiku (Paid)" },
     ],
-    placeholder: "sk-...",
-    keyPrefix: "sk-",
-    baseUrl: "https://opencode.ai/api/v1",
+    placeholder: "sk-or-...",
+    keyPrefix: "sk-or-",
+    baseUrl: "https://openrouter.ai/api/v1",
   },
   gemini: {
     name: "Google Gemini",
@@ -225,7 +230,7 @@ export default function AIChatbotPage() {
       if (provider === "gemini") {
         await streamGemini(newMessages.slice(0, -1), effectiveModel, apiKey.trim());
       } else {
-        const url = provider === "opencode" ? "https://opencode.ai/api/v1" : provider === "custom" ? baseUrl.trim() : undefined;
+        const url = provider === "openrouter" ? "https://openrouter.ai/api/v1" : provider === "custom" ? baseUrl.trim() : undefined;
         await streamOpenAI(newMessages.slice(0, -1), effectiveModel, apiKey.trim(), url);
       }
     } catch (e: unknown) {
@@ -257,7 +262,7 @@ export default function AIChatbotPage() {
           <div>
             <label className="block text-sm font-medium text-zinc-300 mb-2">Provider</label>
             <div className="flex gap-2 flex-wrap">
-              {(["openai", "opencode", "gemini", "custom"] as Provider[]).map((p) => (
+              {(["openai", "openrouter", "gemini", "custom"] as Provider[]).map((p) => (
                 <button
                   key={p}
                   onClick={() => setProvider(p)}
@@ -317,7 +322,7 @@ export default function AIChatbotPage() {
           </div>
         </div>
 
-        {(provider === "custom" || provider === "opencode") && (
+        {(provider === "custom") && (
           <div className="mb-4">
             <label className="block text-sm font-medium text-zinc-300 mb-2">Base URL</label>
             <input
@@ -426,9 +431,9 @@ export default function AIChatbotPage() {
             <p className="text-zinc-500 text-xs mt-1">Requires OpenAI API key (platform.openai.com)</p>
           </div>
           <div>
-            <p className="text-emerald-400 font-medium mb-1">OpenCode</p>
-            <p className="text-zinc-400">MiMo v2.5, MiMo v2, MiMo v1</p>
-            <p className="text-zinc-500 text-xs mt-1">Requires OpenCode API key (opencode.ai)</p>
+            <p className="text-emerald-400 font-medium mb-1">OpenRouter</p>
+            <p className="text-zinc-400">5+ free models (Llama, Hermes, Qwen, Gemma) + paid (GPT-4o, Claude)</p>
+            <p className="text-zinc-500 text-xs mt-1">Free API key at openrouter.ai/keys — free models cost $0</p>
           </div>
           <div>
             <p className="text-emerald-400 font-medium mb-1">Google Gemini</p>
