@@ -22,11 +22,13 @@ export const metadata: Metadata = {
   },
   description:
     "Free online AI-powered tools: AI humanizer, color palette generator, gradient generator, QR code generator, and more. No signup required.",
+  metadataBase: new URL("https://zelve.xyz"),
   openGraph: {
     title: "ToolAI — Free Online AI Tools",
     description:
       "Free online AI-powered tools: AI humanizer, color palette generator, gradient generator, QR code generator, and more.",
     type: "website",
+    url: "https://zelve.xyz",
   },
   keywords: [
     "AI tools",

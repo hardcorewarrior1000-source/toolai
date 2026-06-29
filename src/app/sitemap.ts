@@ -3,7 +3,7 @@ import type { MetadataRoute } from "next";
 export const dynamic = "force-static";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const base = "https://toolai-5ok.pages.dev";
+  const base = "https://zelve.xyz";
 
   return [
     { url: base, lastModified: new Date(), changeFrequency: "weekly", priority: 1 },
