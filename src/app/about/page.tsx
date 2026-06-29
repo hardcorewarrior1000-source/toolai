@@ -30,9 +30,21 @@ export default function AboutPage() {
         <h2 className="text-lg font-semibold text-white mb-3">Supported Wallet Addresses</h2>
         <div className="space-y-3 text-sm">
           <div>
-            <span className="text-zinc-500">ETH / BSC / Polygon:</span>
-            <div className="font-mono text-emerald-400 mt-1 break-all">
-              0xYourWalletAddressHere
+            <span className="text-zinc-500">Solana:</span>
+            <div className="font-mono text-emerald-400 mt-1 break-all text-xs">
+              BeS2p6srqB11aTAKCFazCTsCwhpeCZwQtfbBqegp3LsT
+            </div>
+          </div>
+          <div>
+            <span className="text-zinc-500">Ethereum / BSC / Polygon:</span>
+            <div className="font-mono text-emerald-400 mt-1 break-all text-xs">
+              0xAD99329d02c2cD485Dc86EF0E6FbaDCB0702b551
+            </div>
+          </div>
+          <div>
+            <span className="text-zinc-500">Bitcoin:</span>
+            <div className="font-mono text-emerald-400 mt-1 break-all text-xs">
+              bc1q3h9a3q4axug2csc68858mnjtpqpv0zl9f930jr
             </div>
           </div>
         </div>

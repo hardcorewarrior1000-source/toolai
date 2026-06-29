@@ -5,7 +5,7 @@ export default function Footer() {
         <p>&copy; {new Date().getFullYear()} ToolAI. Free online AI tools.</p>
         <div className="flex items-center gap-4">
           <address className="not-italic">
-            Tip jar: <span className="text-emerald-400 font-mono text-xs">0x...YourWalletHere</span>
+            Tip jar: <span className="text-emerald-400 font-mono text-xs">SOL/ETH/BTC</span>
           </address>
         </div>
       </div>
