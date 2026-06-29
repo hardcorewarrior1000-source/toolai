@@ -55,6 +55,48 @@ const posts = [
     excerpt: "Need to embed images in HTML or CSS? Learn how to convert any image to a Base64 data URL with a free tool.",
     date: "2026-06-15",
   },
+  {
+    slug: "how-to-validate-bitcoin-address",
+    title: "How to Validate a Bitcoin Address (P2PKH, Bech32, Taproot)",
+    excerpt: "Learn how to verify Bitcoin wallet addresses using checksum validation — supporting Legacy, SegWit, and Taproot formats.",
+    date: "2026-07-08",
+  },
+  {
+    slug: "eth-to-wei-converter-guide",
+    title: "ETH to Wei Converter: Understanding Ethereum Units",
+    excerpt: "A complete guide to Ethereum's unit system — from Wei to Gwei to ETH — with a free conversion tool for developers.",
+    date: "2026-07-07",
+  },
+  {
+    slug: "best-free-crypto-price-calculator-2026",
+    title: "Best Free Crypto Price Calculator (2026)",
+    excerpt: "Compare live cryptocurrency prices across 10+ coins and 7 fiat currencies with a free browser-based calculator.",
+    date: "2026-07-06",
+  },
+  {
+    slug: "understanding-ethereum-gas-fees",
+    title: "Understanding Ethereum Gas Fees: A Practical Guide",
+    excerpt: "What are gas fees, why do they vary, and how can you save money on Ethereum, Polygon, and BNB Chain transactions?",
+    date: "2026-07-04",
+  },
+  {
+    slug: "how-to-check-wallet-balance",
+    title: "How to Check Wallet Balance for Any Crypto (ETH, SOL, BTC)",
+    excerpt: "Enter any wallet address and check its balance on Ethereum, Solana, or Bitcoin — free tool, no signup needed.",
+    date: "2026-07-03",
+  },
+  {
+    slug: "what-is-bip39-mnemonic-phrase",
+    title: "What Is a BIP39 Mnemonic Phrase? Seed Phrase Security Guide",
+    excerpt: "Learn how BIP39 mnemonic phrases work, why they matter for crypto security, and how to generate them safely for testing.",
+    date: "2026-07-02",
+  },
+  {
+    slug: "how-to-create-crypto-payment-link",
+    title: "How to Create a Crypto Payment Link (BIP21, EIP-681)",
+    excerpt: "Generate QR-code-ready payment URIs for Bitcoin, Ethereum, and Solana with a free online tool.",
+    date: "2026-07-01",
+  },
 ];
 
 export default function BlogPage() {
