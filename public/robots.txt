@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://zelve.xyz/sitemap.xml
+Sitemap: https://toolai.zelve.xyz/sitemap.xml
