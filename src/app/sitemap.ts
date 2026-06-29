@@ -14,6 +14,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${base}/verify`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.8 },
 
     // AI & Creative Tools
+    { url: `${base}/tools/ai-chatbot`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.9 },
     { url: `${base}/tools/ai-humanizer`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.8 },
     { url: `${base}/tools/color-palette`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.8 },
     { url: `${base}/tools/gradient-generator`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.7 },
@@ -52,5 +53,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${base}/blog/how-to-check-wallet-balance`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.6 },
     { url: `${base}/blog/what-is-bip39-mnemonic-phrase`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.6 },
     { url: `${base}/blog/how-to-create-crypto-payment-link`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.6 },
+    { url: `${base}/blog/free-ai-chatbot-playground-no-signup`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.6 },
   ];
 }

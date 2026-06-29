@@ -4,6 +4,12 @@ import Link from "next/link";
 
 const aiTools = [
   {
+    title: "AI Chatbot Playground",
+    description: "Paste your API key and chat with GPT-4o or Gemini directly in your browser. Streaming responses.",
+    href: "/tools/ai-chatbot",
+    icon: "💬",
+  },
+  {
     title: "AI to Human Text",
     description: "Convert AI-generated text to sound more natural and human-like with 60+ transformation rules.",
     href: "/tools/ai-humanizer",

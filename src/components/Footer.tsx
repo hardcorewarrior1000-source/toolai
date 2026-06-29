@@ -17,6 +17,7 @@ export default function Footer() {
           <div>
             <h4 className="text-sm font-semibold text-zinc-300 mb-3">AI Tools</h4>
             <div className="space-y-2 text-sm">
+              <Link href="/tools/ai-chatbot" className="block text-zinc-500 hover:text-emerald-400 transition-colors">AI Chatbot</Link>
               <Link href="/tools/ai-humanizer" className="block text-zinc-500 hover:text-emerald-400 transition-colors">AI Humanizer</Link>
               <Link href="/tools/color-palette" className="block text-zinc-500 hover:text-emerald-400 transition-colors">Color Palette</Link>
               <Link href="/tools/qr-generator" className="block text-zinc-500 hover:text-emerald-400 transition-colors">QR Generator</Link>

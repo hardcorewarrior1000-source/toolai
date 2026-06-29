@@ -97,6 +97,12 @@ const posts = [
     excerpt: "Generate QR-code-ready payment URIs for Bitcoin, Ethereum, and Solana with a free online tool.",
     date: "2026-07-01",
   },
+  {
+    slug: "free-ai-chatbot-playground-no-signup",
+    title: "Free AI Chatbot Playground — No Signup, No Data Collection",
+    excerpt: "Chat with GPT-4o and Gemini directly in your browser. Paste your API key and start talking — your data never leaves your device.",
+    date: "2026-07-09",
+  },
 ];
 
 export default function BlogPage() {
