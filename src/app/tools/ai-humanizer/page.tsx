@@ -3,6 +3,8 @@
 import { useState, type ChangeEvent, useCallback } from "react";
 import AdBanner from "@/components/AdBanner";
 import TipJar from "@/components/TipJar";
+import ToolGate from "@/components/ToolGate";
+import { useSubscription } from "@/components/SubscriptionProvider";
 
 const contractions: [RegExp, string][] = [
   [/\bI am\b/gi, "I'm"],
@@ -265,6 +267,7 @@ export default function AIHumanizerPage() {
   const [output, setOutput] = useState("");
   const [changes, setChanges] = useState(0);
   const [strength, setStrength] = useState(2);
+  const { track } = useSubscription();
 
   const handleInput = useCallback((e: ChangeEvent<HTMLTextAreaElement>) => {
     const val = e.target.value;
@@ -272,7 +275,8 @@ export default function AIHumanizerPage() {
     const { result, changes: ch } = humanize(val, 2);
     setOutput(result);
     setChanges(ch);
-  }, []);
+    if (val.trim()) track("ai-humanizer");
+  }, [track]);
 
   const handleStrength = useCallback((val: number) => {
     setStrength(val);
@@ -288,6 +292,7 @@ export default function AIHumanizerPage() {
   };
 
   return (
+    <ToolGate toolId="ai-humanizer">
     <div className="max-w-3xl mx-auto px-4 py-12">
       <h1 className="text-3xl font-bold text-white mb-2">AI to Human Text Converter</h1>
       <p className="text-zinc-400 mb-8">
@@ -363,5 +368,6 @@ export default function AIHumanizerPage() {
       <AdBanner />
       <TipJar />
     </div>
+    </ToolGate>
   );
 }

@@ -3,6 +3,8 @@
 import { useState, useRef, type ChangeEvent } from "react";
 import AdBanner from "@/components/AdBanner";
 import TipJar from "@/components/TipJar";
+import ToolGate from "@/components/ToolGate";
+import { useSubscription } from "@/components/SubscriptionProvider";
 
 interface RGB {
   r: number;
@@ -40,6 +42,7 @@ export default function ColorPalettePage() {
   const [colors, setColors] = useState<RGB[]>([]);
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const { track } = useSubscription();
 
   const handleImage = (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -65,6 +68,7 @@ export default function ColorPalettePage() {
 
         const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
         setColors(getDominantColors(imageData.data, 6));
+        track("color-palette");
       };
       img.src = url;
     };
@@ -76,6 +80,7 @@ export default function ColorPalettePage() {
   };
 
   return (
+    <ToolGate toolId="color-palette">
     <div className="max-w-3xl mx-auto px-4 py-12">
       <h1 className="text-3xl font-bold text-white mb-2">Color Palette from Image</h1>
       <p className="text-zinc-400 mb-8">
@@ -132,5 +137,6 @@ export default function ColorPalettePage() {
       <AdBanner />
       <TipJar />
     </div>
+    </ToolGate>
   );
 }

@@ -4,6 +4,8 @@ import { useState, useEffect, useRef, type ChangeEvent } from "react";
 import QRCode from "qrcode";
 import AdBanner from "@/components/AdBanner";
 import TipJar from "@/components/TipJar";
+import ToolGate from "@/components/ToolGate";
+import { useSubscription } from "@/components/SubscriptionProvider";
 
 export default function QRGeneratorPage() {
   const [text, setText] = useState("");
@@ -11,6 +13,7 @@ export default function QRGeneratorPage() {
   const [size, setSize] = useState(300);
   const [dataUrl, setDataUrl] = useState<string | null>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const { track } = useSubscription();
 
   const handleText = (e: ChangeEvent<HTMLInputElement>) => {
     setText(e.target.value);
@@ -36,6 +39,7 @@ export default function QRGeneratorPage() {
       (err, url) => {
         if (!err) {
           setDataUrl(url);
+          track("qr-generator");
         }
       }
     );
@@ -50,6 +54,7 @@ export default function QRGeneratorPage() {
   };
 
   return (
+    <ToolGate toolId="qr-generator">
     <div className="max-w-3xl mx-auto px-4 py-12">
       <h1 className="text-3xl font-bold text-white mb-2">QR Code Generator</h1>
       <p className="text-zinc-400 mb-8">
@@ -122,5 +127,6 @@ export default function QRGeneratorPage() {
       <AdBanner />
       <TipJar />
     </div>
+    </ToolGate>
   );
 }

@@ -3,6 +3,8 @@
 import { useState, useRef, useCallback, useEffect } from "react";
 import AdBanner from "@/components/AdBanner";
 import TipJar from "@/components/TipJar";
+import ToolGate from "@/components/ToolGate";
+import { useSubscription } from "@/components/SubscriptionProvider";
 
 type Analysis = {
   width: number;
@@ -190,6 +192,7 @@ export default function ImageToPromptPage() {
   const [loading, setLoading] = useState(false);
   const [copied, setCopied] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
+  const { track } = useSubscription();
 
   const handleFile = useCallback(async (e: React.ChangeEvent<HTMLInputElement>) => {
     const f = e.target.files?.[0];
@@ -203,6 +206,7 @@ export default function ImageToPromptPage() {
       const initialStyle = styles[0];
       const initialMood = moods[0];
       setPrompt(generatePrompt(result, initialStyle, initialMood));
+      track("image-to-prompt");
     } catch {
       // ignore
     }
@@ -221,6 +225,7 @@ export default function ImageToPromptPage() {
   };
 
   return (
+    <ToolGate toolId="image-to-prompt">
     <div className="max-w-3xl mx-auto px-4 py-12">
       <h1 className="text-3xl font-bold text-white mb-2">Image to Prompt Generator</h1>
       <p className="text-zinc-400 mb-8">
@@ -322,5 +327,6 @@ export default function ImageToPromptPage() {
       <AdBanner />
       <TipJar />
     </div>
+    </ToolGate>
   );
 }

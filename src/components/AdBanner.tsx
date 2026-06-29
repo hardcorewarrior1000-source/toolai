@@ -1,8 +1,13 @@
 "use client";
 
 import Script from "next/script";
+import { useSubscription } from "@/components/SubscriptionProvider";
 
 export default function AdBanner() {
+  const { tier } = useSubscription();
+
+  if (!tier.adsEnabled) return null;
+
   return (
     <div className="w-full my-8">
       <Script

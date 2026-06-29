@@ -7,6 +7,7 @@ export default function Footer() {
         <p>&copy; {new Date().getFullYear()} ToolAI. Free online AI tools.</p>
         <div className="flex items-center gap-6">
           <Link href="/" className="hover:text-zinc-300 transition-colors">Home</Link>
+          <Link href="/pricing" className="hover:text-zinc-300 transition-colors">Pricing</Link>
           <Link href="/about" className="hover:text-zinc-300 transition-colors">About</Link>
           <Link href="/blog" className="hover:text-zinc-300 transition-colors">Blog</Link>
           <Link href="/privacy" className="hover:text-zinc-300 transition-colors">Privacy</Link>
