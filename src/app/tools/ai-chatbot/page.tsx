@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect, type FormEvent } from "react";
 
-type Provider = "openai" | "gemini";
+type Provider = "openai" | "gemini" | "opencode" | "custom";
 
 interface Message {
   role: "user" | "assistant";
@@ -14,6 +14,7 @@ interface ProviderConfig {
   models: { id: string; name: string }[];
   placeholder: string;
   keyPrefix: string;
+  baseUrl?: string;
 }
 
 const PROVIDERS: Record<Provider, ProviderConfig> = {
@@ -28,6 +29,17 @@ const PROVIDERS: Record<Provider, ProviderConfig> = {
     placeholder: "sk-...",
     keyPrefix: "sk-",
   },
+  opencode: {
+    name: "OpenCode",
+    models: [
+      { id: "mimo-v2.5", name: "MiMo v2.5" },
+      { id: "mimo-v2", name: "MiMo v2" },
+      { id: "mimo-v1", name: "MiMo v1" },
+    ],
+    placeholder: "sk-...",
+    keyPrefix: "sk-",
+    baseUrl: "https://opencode.ai/api/v1",
+  },
   gemini: {
     name: "Google Gemini",
     models: [
@@ -38,6 +50,15 @@ const PROVIDERS: Record<Provider, ProviderConfig> = {
     ],
     placeholder: "AIza...",
     keyPrefix: "AIza",
+  },
+  custom: {
+    name: "Custom (OpenAI-compatible)",
+    models: [
+      { id: "custom-model", name: "Enter model ID below" },
+    ],
+    placeholder: "sk-...",
+    keyPrefix: "sk-",
+    baseUrl: "",
   },
 };
 
@@ -50,6 +71,8 @@ export default function AIChatbotPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [keyVisible, setKeyVisible] = useState(false);
+  const [customModel, setCustomModel] = useState("");
+  const [baseUrl, setBaseUrl] = useState("");
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
 
@@ -59,6 +82,8 @@ export default function AIChatbotPage() {
 
   useEffect(() => {
     setModel(PROVIDERS[provider].models[0].id);
+    setBaseUrl(PROVIDERS[provider].baseUrl || "");
+    setCustomModel("");
     setError("");
   }, [provider]);
 
@@ -68,8 +93,9 @@ export default function AIChatbotPage() {
     return apiKey.slice(0, 4) + "••••" + apiKey.slice(-4);
   };
 
-  async function streamOpenAI(messages: Message[], model: string, key: string): Promise<string> {
-    const res = await fetch("https://api.openai.com/v1/chat/completions", {
+  async function streamOpenAI(messages: Message[], model: string, key: string, baseUrl?: string): Promise<string> {
+    const url = (baseUrl || "https://api.openai.com") + "/chat/completions";
+    const res = await fetch(url, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -192,10 +218,15 @@ export default function AIChatbotPage() {
     setLoading(true);
 
     try {
-      if (provider === "openai") {
-        await streamOpenAI(newMessages.slice(0, -1), model, apiKey.trim());
+      const effectiveModel = provider === "custom" ? customModel.trim() : model;
+      if (!effectiveModel) {
+        throw new Error("Please enter a model ID");
+      }
+      if (provider === "gemini") {
+        await streamGemini(newMessages.slice(0, -1), effectiveModel, apiKey.trim());
       } else {
-        await streamGemini(newMessages.slice(0, -1), model, apiKey.trim());
+        const url = provider === "opencode" ? "https://opencode.ai/api/v1" : provider === "custom" ? baseUrl.trim() : undefined;
+        await streamOpenAI(newMessages.slice(0, -1), effectiveModel, apiKey.trim(), url);
       }
     } catch (e: unknown) {
       const msg = e instanceof Error ? e.message : "Request failed";
@@ -225,12 +256,12 @@ export default function AIChatbotPage() {
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4">
           <div>
             <label className="block text-sm font-medium text-zinc-300 mb-2">Provider</label>
-            <div className="flex gap-2">
-              {(["openai", "gemini"] as Provider[]).map((p) => (
+            <div className="flex gap-2 flex-wrap">
+              {(["openai", "opencode", "gemini", "custom"] as Provider[]).map((p) => (
                 <button
                   key={p}
                   onClick={() => setProvider(p)}
-                  className={`flex-1 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
+                  className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
                     provider === p ? "bg-emerald-500/20 text-emerald-400 border border-emerald-500/30" : "bg-zinc-800 text-zinc-400 border border-zinc-700 hover:border-zinc-600"
                   }`}
                 >
@@ -242,15 +273,25 @@ export default function AIChatbotPage() {
 
           <div>
             <label className="block text-sm font-medium text-zinc-300 mb-2">Model</label>
-            <select
-              value={model}
-              onChange={(e) => setModel(e.target.value)}
-              className="w-full bg-zinc-950 border border-zinc-700 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-emerald-500/50 transition-colors"
-            >
-              {config.models.map((m) => (
-                <option key={m.id} value={m.id}>{m.name}</option>
-              ))}
-            </select>
+            {provider === "custom" ? (
+              <input
+                type="text"
+                value={customModel}
+                onChange={(e) => setCustomModel(e.target.value)}
+                placeholder="e.g. gpt-4o, claude-3-opus, ..."
+                className="w-full bg-zinc-950 border border-zinc-700 rounded-lg px-3 py-2 text-white text-sm placeholder-zinc-600 focus:outline-none focus:border-emerald-500/50 transition-colors"
+              />
+            ) : (
+              <select
+                value={model}
+                onChange={(e) => setModel(e.target.value)}
+                className="w-full bg-zinc-950 border border-zinc-700 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-emerald-500/50 transition-colors"
+              >
+                {config.models.map((m) => (
+                  <option key={m.id} value={m.id}>{m.name}</option>
+                ))}
+              </select>
+            )}
           </div>
 
           <div>
@@ -275,6 +316,20 @@ export default function AIChatbotPage() {
             )}
           </div>
         </div>
+
+        {(provider === "custom" || provider === "opencode") && (
+          <div className="mb-4">
+            <label className="block text-sm font-medium text-zinc-300 mb-2">Base URL</label>
+            <input
+              type="text"
+              value={baseUrl}
+              onChange={(e) => setBaseUrl(e.target.value)}
+              placeholder="https://api.example.com/v1"
+              className="w-full bg-zinc-950 border border-zinc-700 rounded-lg px-3 py-2 text-white text-sm font-mono placeholder-zinc-600 focus:outline-none focus:border-emerald-500/50 transition-colors"
+            />
+            <p className="text-[10px] text-zinc-600 mt-1">OpenAI-compatible endpoint. Appends /chat/completions automatically.</p>
+          </div>
+        )}
 
         <div className="flex items-center gap-3 text-xs text-zinc-500">
           <span className="flex items-center gap-1">
@@ -371,9 +426,19 @@ export default function AIChatbotPage() {
             <p className="text-zinc-500 text-xs mt-1">Requires OpenAI API key (platform.openai.com)</p>
           </div>
           <div>
+            <p className="text-emerald-400 font-medium mb-1">OpenCode</p>
+            <p className="text-zinc-400">MiMo v2.5, MiMo v2, MiMo v1</p>
+            <p className="text-zinc-500 text-xs mt-1">Requires OpenCode API key (opencode.ai)</p>
+          </div>
+          <div>
             <p className="text-emerald-400 font-medium mb-1">Google Gemini</p>
             <p className="text-zinc-400">Gemini 2.5 Flash/Pro, 2.0 Flash, 1.5 Flash</p>
             <p className="text-zinc-500 text-xs mt-1">Requires Google AI Studio API key (aistudio.google.com)</p>
+          </div>
+          <div>
+            <p className="text-emerald-400 font-medium mb-1">Custom (OpenAI-compatible)</p>
+            <p className="text-zinc-400">Any OpenAI-compatible API (Ollama, LM Studio, vLLM, etc.)</p>
+            <p className="text-zinc-500 text-xs mt-1">Enter your base URL and model ID manually</p>
           </div>
         </div>
         <div className="mt-4 p-3 bg-zinc-950 border border-zinc-800 rounded-lg text-xs text-zinc-500">
