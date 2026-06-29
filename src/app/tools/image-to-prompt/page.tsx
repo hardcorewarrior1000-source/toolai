@@ -96,19 +96,22 @@ function analyzeImage(file: File): Promise<Analysis> {
 
       const dominantColors = sorted.map(([hex]) => hex);
 
-      // Compute dominant hue from brightest pixels
-      const r = data[0],
-        g = data[1],
-        b = data[2];
-      const max = Math.max(r, g, b);
-      const min = Math.min(r, g, b);
-      let hue = 0;
-      if (max !== min) {
+      // Compute dominant hue via histogram across sampled pixels
+      const hueCounts = new Map<number, number>();
+      for (let i = 0; i < data.length; i += 40) {
+        const r = data[i], g = data[i + 1], b = data[i + 2];
+        const max = Math.max(r, g, b), min = Math.min(r, g, b);
+        if (max === min) continue;
         const d = max - min;
-        if (max === r) hue = ((g - b) / d + (g < b ? 6 : 0)) * 60;
-        else if (max === g) hue = ((b - r) / d + 2) * 60;
-        else hue = ((r - g) / d + 4) * 60;
+        let h = 0;
+        if (max === r) h = ((g - b) / d + (g < b ? 6 : 0)) * 60;
+        else if (max === g) h = ((b - r) / d + 2) * 60;
+        else h = ((r - g) / d + 4) * 60;
+        const bucket = Math.round(h / 30) * 30;
+        hueCounts.set(bucket, (hueCounts.get(bucket) || 0) + 1);
       }
+      const dominantBucket = [...hueCounts.entries()].sort((a, b) => b[1] - a[1])[0]?.[0] || 0;
+      const hue = dominantBucket + 15;
 
       const avgSat = totalSaturation / sampled;
       const total = warmPixels + coolPixels;

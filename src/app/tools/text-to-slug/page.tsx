@@ -13,9 +13,7 @@ export default function TextToSlugPage() {
     setInput(e.target.value);
   };
 
-  const slug = input
-    .trim()
-    .toLowerCase()
+  const slug = (lowercase ? input.trim().toLowerCase() : input.trim())
     .replace(/[^\w\s-]/g, "")
     .replace(/\s+/g, separator)
     .replace(/-+/g, separator)
