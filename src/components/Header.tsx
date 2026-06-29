@@ -1,12 +1,17 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useSubscription } from "@/components/SubscriptionProvider";
 
 export default function Header() {
   const [open, setOpen] = useState(false);
   const { tier } = useSubscription();
+  const [loggedIn, setLoggedIn] = useState(false);
+
+  useEffect(() => {
+    fetch("/api/auth/me").then((r) => r.ok && setLoggedIn(true)).catch(() => {});
+  }, []);
 
   return (
     <header className="border-b border-zinc-800 bg-zinc-950/80 backdrop-blur-sm sticky top-0 z-50">
@@ -27,6 +32,11 @@ export default function Header() {
           <Link href="/tools/image-to-prompt" className="hover:text-white transition-colors whitespace-nowrap">Img→Prompt</Link>
           <Link href="/pricing" className="hover:text-white transition-colors whitespace-nowrap">Pricing</Link>
           <Link href="/verify" className="hover:text-white transition-colors whitespace-nowrap">Verify</Link>
+          {loggedIn ? (
+            <Link href="/account" className="hover:text-white transition-colors whitespace-nowrap text-emerald-400">Account</Link>
+          ) : (
+            <Link href="/login" className="hover:text-white transition-colors whitespace-nowrap">Log In</Link>
+          )}
           <Link href="/about" className="hover:text-white transition-colors whitespace-nowrap">About</Link>
         </nav>
 
@@ -56,6 +66,11 @@ export default function Header() {
           <Link href="/tools/image-to-prompt" onClick={() => setOpen(false)} className="hover:text-white">Image to Prompt</Link>
           <Link href="/pricing" onClick={() => setOpen(false)} className="hover:text-white font-semibold text-emerald-400">Pricing</Link>
           <Link href="/verify" onClick={() => setOpen(false)} className="hover:text-white">Verify Payment</Link>
+          {loggedIn ? (
+            <Link href="/account" onClick={() => setOpen(false)} className="hover:text-white text-emerald-400">Account</Link>
+          ) : (
+            <Link href="/login" onClick={() => setOpen(false)} className="hover:text-white">Log In</Link>
+          )}
           <Link href="/about" onClick={() => setOpen(false)} className="hover:text-white">About</Link>
         </div>
       )}

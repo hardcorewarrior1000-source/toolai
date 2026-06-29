@@ -53,6 +53,15 @@ export default function VerifyPage() {
       setLicense(lic);
       setTier(res.tier);
       refresh();
+
+      // Also store in D1 if logged in
+      try {
+        await fetch("/api/license/activate", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ txHash: txHash.trim(), chain, tier: res.tier }),
+        });
+      } catch { /* not logged in, that's fine */ }
     }
     setVerifying(false);
   };
