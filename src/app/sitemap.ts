@@ -16,6 +16,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${base}/tools/word-counter`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.7 },
     { url: `${base}/tools/text-to-slug`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.7 },
     { url: `${base}/tools/qr-generator`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.8 },
+    { url: `${base}/tools/image-to-prompt`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.8 },
     { url: `${base}/blog/how-to-humanize-ai-text`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.6 },
     { url: `${base}/blog/best-free-ai-tools-2026`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.6 },
     { url: `${base}/blog/what-is-image-to-prompt`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.6 },

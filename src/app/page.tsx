@@ -44,6 +44,12 @@ const tools = [
     href: "/tools/qr-generator",
     icon: "📱",
   },
+  {
+    title: "Image to Prompt",
+    description: "Upload any image and get a detailed AI prompt for Midjourney, DALL-E, Stable Diffusion.",
+    href: "/tools/image-to-prompt",
+    icon: "🖼️",
+  },
 ];
 
 export default function Home() {
