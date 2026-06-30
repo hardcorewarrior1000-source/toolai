@@ -7,7 +7,7 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
           <div className="md:col-span-1">
             <Link href="/" className="text-xl font-bold tracking-tight text-white">
-              Tool<span className="text-emerald-400">AI</span>
+              Zelve <span className="text-emerald-400">Tool AI</span>
             </Link>
             <p className="text-zinc-500 text-sm mt-2 leading-relaxed">
               Free online tools for developers, creators, and crypto enthusiasts. No signup required.
@@ -49,7 +49,7 @@ export default function Footer() {
         <div className="section-divider mb-6" />
 
         <div className="flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-zinc-600">
-          <p>&copy; {new Date().getFullYear()} ToolAI. All rights reserved.</p>
+          <p>&copy; {new Date().getFullYear()} Zelve Tool AI. All rights reserved.</p>
           <div className="flex items-center gap-4">
             <span>Built with Next.js &amp; Tailwind CSS</span>
             <span className="text-zinc-700">|</span>

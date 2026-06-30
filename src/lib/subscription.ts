@@ -162,25 +162,25 @@ export function getTierIndex(id: string): number {
   return idx >= 0 ? idx : 0;
 }
 
-const USAGE_KEY = "toolai_usage";
-const TIER_KEY = "toolai_tier";
+const USAGE_KEY = "Zelve Tool AI_usage";
+const TIER_KEY = "Zelve Tool AI_tier";
 
 export function getCurrentTier(): Tier {
   if (typeof window === "undefined") return tiers[0];
   const tierId = localStorage.getItem(TIER_KEY) || "free";
   const tier = getTier(tierId);
   if (tier.id !== "free") {
-    const licRaw = localStorage.getItem("toolai_license");
+    const licRaw = localStorage.getItem("Zelve Tool AI_license");
     if (licRaw) {
       try {
         const lic = JSON.parse(licRaw);
         if (new Date(lic.expiresAt) < new Date()) {
-          localStorage.removeItem("toolai_license");
+          localStorage.removeItem("Zelve Tool AI_license");
           localStorage.setItem(TIER_KEY, "free");
           return tiers[0];
         }
       } catch {
-        localStorage.removeItem("toolai_license");
+        localStorage.removeItem("Zelve Tool AI_license");
         localStorage.setItem(TIER_KEY, "free");
         return tiers[0];
       }

@@ -199,7 +199,7 @@ export default function Home() {
         <AdBanner />
 
         <div className="mt-12 bg-zinc-900/40 border border-zinc-800/50 rounded-2xl p-8 text-center">
-          <h2 className="text-2xl font-bold text-white mb-3">Why ToolAI?</h2>
+          <h2 className="text-2xl font-bold text-white mb-3">Why Zelve Tool AI?</h2>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mt-6 text-sm">
             <div>
               <span className="text-2xl mb-2 block">🔒</span>

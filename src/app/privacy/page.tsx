@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Privacy Policy",
-  description: "Privacy Policy for ToolAI — how we handle your data.",
+  description: "Privacy Policy for Zelve Tool AI — how we handle your data.",
 };
 
 export default function PrivacyPage() {
@@ -11,7 +11,7 @@ export default function PrivacyPage() {
       <h1 className="text-3xl font-bold text-white mb-6">Privacy Policy</h1>
       <div className="space-y-4 text-zinc-400 text-sm leading-relaxed">
         <p>
-          ToolAI does not collect, store, or share any personal data. All tools run entirely in your
+          Zelve Tool AI does not collect, store, or share any personal data. All tools run entirely in your
           browser — no images, text, or files are uploaded to any server.
         </p>
         <p>
@@ -28,7 +28,7 @@ export default function PrivacyPage() {
           advertisements. We do not control these cookies.
         </p>
         <p>
-          By using ToolAI, you consent to this policy. If you have questions, contact us via the
+          By using Zelve Tool AI, you consent to this policy. If you have questions, contact us via the
           About page.
         </p>
       </div>

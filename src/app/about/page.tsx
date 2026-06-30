@@ -4,17 +4,17 @@ import { WALLETS } from "@/lib/wallets";
 
 export const metadata: Metadata = {
   title: "About",
-  description: "About ToolAI — free online AI-powered tools for everyone.",
+  description: "About Zelve Tool AI — free online AI-powered tools for everyone.",
 };
 
 export default function AboutPage() {
   return (
     <div className="max-w-3xl mx-auto px-4 py-12">
-      <h1 className="text-3xl font-bold text-white mb-6">About ToolAI</h1>
+      <h1 className="text-3xl font-bold text-white mb-6">About Zelve Tool AI</h1>
 
       <div className="space-y-4 text-zinc-400 leading-relaxed">
         <p>
-          ToolAI is a collection of free, fast, browser-based tools designed to help
+          Zelve Tool AI is a collection of free, fast, browser-based tools designed to help
           developers, designers, writers, and creators work smarter.
         </p>
         <p>

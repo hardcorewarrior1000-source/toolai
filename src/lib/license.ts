@@ -1,5 +1,5 @@
-const LICENSE_KEY = "toolai_license";
-const SALT = "toolai_v1_2026";
+const LICENSE_KEY = "Zelve Tool AI_license";
+const SALT = "Zelve Tool AI_v1_2026";
 
 export interface LicenseData {
   key: string;
@@ -27,7 +27,7 @@ export async function generateLicenseKey(txHash: string, tier: string): Promise<
     hash.slice(8, 12).toUpperCase(),
     hash.slice(12, 16).toUpperCase(),
   ];
-  return `TOOLAI-${segments.join("-")}`;
+  return `Zelve Tool AI-${segments.join("-")}`;
 }
 
 export async function activateLicense(
@@ -50,7 +50,7 @@ export async function activateLicense(
   };
 
   localStorage.setItem(LICENSE_KEY, JSON.stringify(data));
-  localStorage.setItem("toolai_tier", tier);
+  localStorage.setItem("Zelve Tool AI_tier", tier);
   return data;
 }
 
@@ -62,7 +62,7 @@ export function getLicense(): LicenseData | null {
     const data: LicenseData = JSON.parse(raw);
     if (new Date(data.expiresAt) < new Date()) {
       localStorage.removeItem(LICENSE_KEY);
-      localStorage.setItem("toolai_tier", "free");
+      localStorage.setItem("Zelve Tool AI_tier", "free");
       return null;
     }
     return data;
@@ -73,7 +73,7 @@ export function getLicense(): LicenseData | null {
 
 export function clearLicense() {
   localStorage.removeItem(LICENSE_KEY);
-  localStorage.setItem("toolai_tier", "free");
+  localStorage.setItem("Zelve Tool AI_tier", "free");
 }
 
 export function isLicenseValid(): boolean {

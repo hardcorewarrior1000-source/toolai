@@ -20,7 +20,7 @@ export default function Header() {
     <header className="border-b border-zinc-800/60 bg-zinc-950/80 backdrop-blur-md sticky top-0 z-50">
       <div className="max-w-6xl mx-auto px-4 h-14 flex items-center justify-between">
         <Link href="/" className="text-xl font-bold tracking-tight text-white">
-          Tool<span className="text-emerald-400">AI</span>
+          Zelve <span className="text-emerald-400">Tool AI</span>
           {tier.id !== "free" && (
             <span className="ml-2 text-[10px] bg-emerald-500/20 text-emerald-400 px-2 py-0.5 rounded-full font-medium">{tier.name}</span>
           )}

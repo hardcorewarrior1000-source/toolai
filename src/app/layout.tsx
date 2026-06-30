@@ -18,18 +18,18 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: {
-    default: "ToolAI — Free Online AI Tools",
-    template: "%s — ToolAI",
+    default: "Zelve Tool AI — Free Online AI Tools",
+    template: "%s — Zelve Tool AI",
   },
   description:
     "Free online AI-powered tools: AI humanizer, color palette generator, gradient generator, QR code generator, and more. No signup required.",
   metadataBase: new URL("https://toolai.zelve.xyz"),
   openGraph: {
-    title: "ToolAI — Free Online AI Tools",
+    title: "Zelve Tool AI — Free Online AI Tools",
     description:
       "Free online AI-powered tools: AI humanizer, color palette generator, gradient generator, QR code generator, and more.",
     type: "website",
-    url: "https://zelve.xyz",
+    url: "https://toolai.zelve.xyz",
   },
   keywords: [
     "AI tools",

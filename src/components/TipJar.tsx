@@ -20,7 +20,7 @@ export default function TipJar() {
 
   return (
     <div className="mt-8 bg-zinc-900 border border-zinc-800 rounded-xl p-6 text-center">
-      <h3 className="text-lg font-semibold text-white mb-2">Support ToolAI</h3>
+      <h3 className="text-lg font-semibold text-white mb-2">Support Zelve Tool AI</h3>
       <p className="text-zinc-400 text-sm mb-4">
         Like this tool? Send a tip to support free online AI tools.
       </p>

@@ -3,7 +3,7 @@ import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "Blog",
-  description: "Articles about AI tools, tips, and tutorials from ToolAI.",
+  description: "Articles about AI tools, tips, and tutorials from Zelve Tool AI.",
 };
 
 const posts = [

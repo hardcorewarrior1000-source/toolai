@@ -349,7 +349,7 @@ export default function AIChatbotPage() {
             Keys stored in browser only
           </span>
           <span>|</span>
-          <span>No data sent to ToolAI servers</span>
+          <span>No data sent to Zelve Tool AI servers</span>
         </div>
       </div>
 
@@ -455,7 +455,7 @@ export default function AIChatbotPage() {
         </div>
         <div className="mt-4 p-3 bg-zinc-950 border border-zinc-800 rounded-lg text-xs text-zinc-500">
           <p className="font-medium text-zinc-400 mb-1">{"\uD83D\uDD12"} Privacy Notice</p>
-          <p>Your API key is stored only in your browser&apos;s memory and is sent directly to the AI provider. ToolAI never sees, stores, or transmits your key. Clearing your browser data or clicking &quot;Clear&quot; removes all chat history.</p>
+          <p>Your API key is stored only in your browser&apos;s memory and is sent directly to the AI provider. Zelve Tool AI never sees, stores, or transmits your key. Clearing your browser data or clicking &quot;Clear&quot; removes all chat history.</p>
         </div>
       </div>
     </div>
