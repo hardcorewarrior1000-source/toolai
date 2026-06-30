@@ -197,7 +197,8 @@ export default function AIHumanizerPage() {
   const [diff, setDiff] = useState<{ original: string; humanized: string }[]>([]);
   const [strength, setStrength] = useState(2);
   const [view, setView] = useState<"output" | "diff">("output");
-  const { track } = useSubscription();
+  const { track, tier } = useSubscription();
+  const isProPlus = tier.id === "pro" || tier.id === "business" || tier.id === "enterprise";
 
   const inputStats = useMemo(() => getStats(input), [input]);
   const outputStats = useMemo(() => getStats(output), [output]);
@@ -320,31 +321,45 @@ export default function AIHumanizerPage() {
           <input
             type="range"
             min={1}
-            max={4}
+            max={isProPlus ? 4 : 3}
             value={strength}
             onChange={(e) => handleStrength(Number(e.target.value))}
             className="flex-1 max-w-xs accent-emerald-500"
           />
           <div className="flex gap-2">
             {[
-              { val: 1, label: "Light" },
-              { val: 2, label: "Medium" },
-              { val: 3, label: "Aggressive" },
-              { val: 4, label: "Extreme" },
-            ].map((s) => (
-              <button
-                key={s.val}
-                onClick={() => handleStrength(s.val)}
-                className={`px-3 py-1 text-xs rounded-lg transition-colors ${
-                  strength === s.val
-                    ? "bg-emerald-500/20 text-emerald-400 border border-emerald-500/30"
-                    : "bg-zinc-800 text-zinc-400 border border-zinc-700 hover:border-zinc-600"
-                }`}
-              >
-                {s.label}
-              </button>
-            ))}
+              { val: 1, label: "Light", pro: false },
+              { val: 2, label: "Medium", pro: false },
+              { val: 3, label: "Aggressive", pro: false },
+              { val: 4, label: "Extreme", pro: true },
+            ].map((s) => {
+              const locked = s.pro && !isProPlus;
+              return (
+                <button
+                  key={s.val}
+                  onClick={() => !locked && handleStrength(s.val)}
+                  disabled={locked}
+                  className={`px-3 py-1 text-xs rounded-lg transition-colors relative ${
+                    locked
+                      ? "bg-zinc-800 text-zinc-600 border border-zinc-700 cursor-not-allowed opacity-50"
+                      : strength === s.val
+                      ? "bg-emerald-500/20 text-emerald-400 border border-emerald-500/30"
+                      : "bg-zinc-800 text-zinc-400 border border-zinc-700 hover:border-zinc-600"
+                  }`}
+                >
+                  {s.label}
+                  {locked && (
+                    <span className="absolute -top-1.5 -right-1.5 text-[8px]">{"\uD83D\uDD12"}</span>
+                  )}
+                </button>
+              );
+            })}
           </div>
+          {!isProPlus && (
+            <a href="/pricing" className="text-[10px] text-emerald-400 hover:text-emerald-300 transition-colors">
+              Upgrade to Pro for Extreme →
+            </a>
+          )}
         </div>
 
         {input && output && (

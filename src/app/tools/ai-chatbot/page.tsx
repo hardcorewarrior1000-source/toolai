@@ -25,7 +25,6 @@ interface ModelConfig {
 
 const MODELS: ModelConfig[] = [
   { id: "llama-3.1-8b-instant", name: "Llama 3.1 8B", tier: "free", description: "Lightning-fast responses, great for quick tasks", provider: "groq" },
-  { id: "gemma2-9b-it", name: "Gemma 2 9B", tier: "starter", description: "Google's efficient model, good at reasoning", provider: "groq" },
   { id: "llama-3.3-70b-versatile", name: "Llama 3.3 70B", tier: "pro", description: "Meta's most capable model — fast and smart", provider: "groq" },
   { id: "nvidia/nemotron-3-super-120b-a12b:free", name: "Nemotron 3 Super", tier: "pro", description: "NVIDIA's 120B parameter powerhouse", provider: "openrouter" },
   { id: "google/gemma-4-26b-a4b-it:free", name: "Gemma 4 26B", tier: "pro", description: "Google's latest, great for creative tasks", provider: "openrouter" },

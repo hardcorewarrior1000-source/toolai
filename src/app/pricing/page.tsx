@@ -249,10 +249,10 @@ export default function PricingPage() {
               <tr className="border-b border-zinc-800/50">
                 <td className="py-3 px-4 text-zinc-300 font-medium">AI Chat Models</td>
                 <td className="text-center py-3 px-4 text-zinc-400 text-xs">Llama 3.1 8B</td>
-                <td className="text-center py-3 px-4 text-zinc-400 text-xs">Llama 3.1 8B, Gemma 2 9B</td>
+                <td className="text-center py-3 px-4 text-zinc-400 text-xs">Llama 3.1 8B</td>
+                <td className="text-center py-3 px-4 text-emerald-400 text-xs">Llama 3.3 70B, Nemotron, Gemma 4, GPT-OSS</td>
                 <td className="text-center py-3 px-4 text-emerald-400 text-xs">All 6 models</td>
-                <td className="text-center py-3 px-4 text-emerald-400 text-xs">All 7 models</td>
-                <td className="text-center py-3 px-4 text-emerald-400 text-xs">All 7 + priority</td>
+                <td className="text-center py-3 px-4 text-emerald-400 text-xs">All 6 + priority</td>
               </tr>
               <tr className="border-b border-zinc-800/50">
                 <td className="py-3 px-4 text-zinc-300 font-medium">AI Chat Messages</td>
