@@ -1,4 +1,10 @@
 User-agent: *
 Allow: /
 
+Disallow: /login/
+Disallow: /signup/
+Disallow: /account/
+Disallow: /verify/
+Disallow: /api/
+
 Sitemap: https://toolai.zelve.xyz/sitemap.xml

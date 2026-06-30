@@ -1,133 +1,89 @@
-"use client";
+import type { Metadata } from "next";
+import GradientGeneratorTool from "./ToolClient";
 
-import { useState } from "react";
-import AdBanner from "@/components/AdBanner";
-import InContentAd from "@/components/InContentAd";
-import TipJar from "@/components/TipJar";
-
-interface ColorStop {
-  color: string;
-  position: number;
-}
-
-const defaultStops: ColorStop[] = [
-  { color: "#10b981", position: 0 },
-  { color: "#3b82f6", position: 100 },
-];
+export const metadata: Metadata = {
+  title: "CSS Gradient Generator — Free Online Tool | Zelve Tool AI",
+  description: "Create beautiful CSS linear gradients with a visual editor. Adjust colors, stops, and angle in real-time. Copy ready-to-use CSS code instantly.",
+  keywords: ["CSS gradient generator", "linear gradient tool", "CSS gradient maker", "gradient color picker", "background gradient CSS", "Zelve gradient generator"],
+  openGraph: {
+    title: "CSS Gradient Generator — Free Online Tool",
+    description: "Create beautiful CSS gradients with a visual editor. Adjust colors, stops, and angle in real-time. Copy ready-to-use CSS code.",
+    type: "website",
+    siteName: "Zelve Tool AI",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "CSS Gradient Generator — Free Online Tool",
+    description: "Create beautiful CSS gradients with a visual editor. Adjust colors, stops, and angle in real-time. Copy ready-to-use CSS code.",
+  },
+};
 
 export default function GradientGeneratorPage() {
-  const [stops, setStops] = useState<ColorStop[]>(defaultStops);
-  const [angle, setAngle] = useState(135);
-  const [copied, setCopied] = useState(false);
-
-  const updateStop = (i: number, updates: Partial<ColorStop>) => {
-    setStops((prev) => prev.map((s, j) => (j === i ? { ...s, ...updates } : s)));
-  };
-
-  const addStop = () => {
-    setStops((prev) => [...prev, { color: "#ffffff", position: 50 }]);
-  };
-
-  const removeStop = (i: number) => {
-    if (stops.length > 2) {
-      setStops((prev) => prev.filter((_, j) => j !== i));
-    }
-  };
-
-  const gradientCSS = `linear-gradient(${angle}deg, ${stops
-    .sort((a, b) => a.position - b.position)
-    .map((s) => `${s.color} ${s.position}%`)
-    .join(", ")})`;
-
-  const copyCSS = async () => {
-    await navigator.clipboard.writeText(`background: ${gradientCSS};`);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
-  };
-
   return (
-    <div className="max-w-3xl mx-auto px-4 py-12">
-      <h1 className="text-3xl font-bold text-white mb-2">CSS Gradient Generator</h1>
-      <p className="text-zinc-400 mb-8">
-        Create beautiful CSS gradients with a visual editor. Copy the code and use it anywhere.
-      </p>
-
-      <div
-        className="h-48 rounded-xl mb-6"
-        style={{ background: gradientCSS }}
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "WebApplication",
+            name: "CSS Gradient Generator",
+            url: "https://toolai.zelve.xyz/tools/gradient-generator",
+            description: "Create beautiful CSS linear gradients with a visual editor and copy ready-to-use CSS code.",
+            applicationCategory: "DesignApplication",
+            operatingSystem: "Web",
+            offers: {
+              "@type": "Offer",
+              price: "0",
+              priceCurrency: "USD",
+            },
+          }),
+        }}
       />
-
-      <div className="space-y-4 mb-6">
-        {stops.map((stop, i) => (
-          <div key={i} className="flex items-center gap-3">
-            <input
-              type="color"
-              value={stop.color}
-              onChange={(e) => updateStop(i, { color: e.target.value })}
-              className="w-10 h-10 rounded border border-zinc-700 bg-transparent cursor-pointer"
-            />
-            <input
-              type="range"
-              min={0}
-              max={100}
-              value={stop.position}
-              onChange={(e) => updateStop(i, { position: Number(e.target.value) })}
-              className="flex-1 accent-emerald-500"
-            />
-            <span className="text-xs text-zinc-500 w-10 text-right">{stop.position}%</span>
-            {stops.length > 2 && (
-              <button onClick={() => removeStop(i)} className="text-zinc-600 hover:text-red-400 text-sm">
-                ✕
-              </button>
-            )}
-          </div>
-        ))}
-      </div>
-
-      {stops.length < 5 && (
-        <button
-          onClick={addStop}
-          className="text-sm text-emerald-400 hover:text-emerald-300 transition-colors mb-6"
-        >
-          + Add color stop
-        </button>
-      )}
-
-      <div className="mb-6">
-        <label className="block text-sm font-medium text-zinc-300 mb-2">Angle: {angle}°</label>
-        <input
-          type="range"
-          min={0}
-          max={360}
-          value={angle}
-          onChange={(e) => setAngle(Number(e.target.value))}
-          className="w-full accent-emerald-500"
-        />
-      </div>
-
-      <div className="bg-zinc-900 border border-zinc-800 rounded-lg p-4">
-        <div className="flex items-center justify-between mb-2">
-          <span className="text-xs text-zinc-400">CSS</span>
-          <button
-            onClick={copyCSS}
-            className="text-xs text-emerald-400 hover:text-emerald-300 transition-colors"
-          >
-            {copied ? "Copied!" : "Copy"}
-          </button>
-        </div>
-        <code className="text-sm text-zinc-300 break-all">background: {gradientCSS};</code>
-      </div>
-
-      <div className="mt-6 text-sm text-zinc-500">
-        <p>Click Copy to use the CSS in your projects.</p>
-      </div>
-
-      <AdBanner />
-      <InContentAd />
-
-      <AdBanner />
-
-      <TipJar />
-    </div>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            mainEntity: [
+              {
+                "@type": "Question",
+                name: "How do I use the CSS gradient generator?",
+                acceptedAnswer: {
+                  "@type": "Answer",
+                  text: "Choose your gradient colors using the color pickers, adjust the position of each color stop using the sliders, set the gradient angle, and click Copy to get the CSS code.",
+                },
+              },
+              {
+                "@type": "Question",
+                name: "Can I add more than two colors?",
+                acceptedAnswer: {
+                  "@type": "Answer",
+                  text: "Yes, you can add up to 5 color stops. Click the '+ Add color stop' button to add more colors to your gradient.",
+                },
+              },
+              {
+                "@type": "Question",
+                name: "What is the gradient angle?",
+                acceptedAnswer: {
+                  "@type": "Answer",
+                  text: "The angle controls the direction of the gradient. 0deg goes from bottom to top, 90deg from left to right, 180deg from top to bottom, and so on. You can set any angle from 0 to 360 degrees.",
+                },
+              },
+              {
+                "@type": "Question",
+                name: "Where can I use the generated CSS?",
+                acceptedAnswer: {
+                  "@type": "Answer",
+                  text: "You can use the generated CSS gradient code anywhere CSS is supported — in your stylesheets, inline styles, React components, Tailwind CSS arbitrary values, or any web project.",
+                },
+              },
+            ],
+          }),
+        }}
+      />
+      <GradientGeneratorTool />
+    </>
   );
 }

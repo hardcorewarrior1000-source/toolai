@@ -32,12 +32,22 @@ export const metadata: Metadata = {
     type: "website",
     url: "https://toolai.zelve.xyz",
     siteName: "Zelve Tool AI",
+    images: [
+      {
+        url: "https://toolai.zelve.xyz/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "Zelve Tool AI — Free Online AI Tools",
+      },
+    ],
+    locale: "en_US",
   },
   twitter: {
     card: "summary_large_image",
     title: "Zelve Tool AI \u2014 Free Online AI Tools",
     description:
       "Free online AI-powered tools: AI humanizer, color palette generator, gradient generator, QR code generator, crypto tools, and more.",
+    images: ["https://toolai.zelve.xyz/og-image.png"],
   },
   keywords: [
     "AI tools", "free online tools", "AI humanizer", "color palette generator",
@@ -48,6 +58,21 @@ export const metadata: Metadata = {
   ],
   robots: { index: true, follow: true },
   verification: { google: "TO7QzwDVoKUHbAoYmk68ZbdSo-7lOHDOzf0tEBE9RFc" },
+  alternates: {
+    canonical: "https://toolai.zelve.xyz",
+    languages: {
+      "en": "https://toolai.zelve.xyz",
+      "th": "https://toolai.zelve.xyz",
+      "es": "https://toolai.zelve.xyz",
+      "pt": "https://toolai.zelve.xyz",
+      "zh": "https://toolai.zelve.xyz",
+      "ja": "https://toolai.zelve.xyz",
+      "ko": "https://toolai.zelve.xyz",
+      "de": "https://toolai.zelve.xyz",
+      "fr": "https://toolai.zelve.xyz",
+      "ru": "https://toolai.zelve.xyz",
+    },
+  },
 };
 
 const gaId = process.env.NEXT_PUBLIC_GA_ID;
@@ -57,18 +82,29 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const jsonLd = {
-    "@context": "https://schema.org",
-    "@type": "WebSite",
-    name: "Zelve Tool AI",
-    url: "https://toolai.zelve.xyz",
-    description: "Free online AI-powered tools for developers, creators, and crypto enthusiasts.",
-    potentialAction: {
-      "@type": "SearchAction",
-      target: "https://toolai.zelve.xyz/tools?q={search_term_string}",
-      "query-input": "required name=search_term_string",
+  const jsonLd = [
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      name: "Zelve Tool AI",
+      url: "https://toolai.zelve.xyz",
+      description: "Free online AI-powered tools for developers, creators, and crypto enthusiasts.",
+      potentialAction: {
+        "@type": "SearchAction",
+        target: "https://toolai.zelve.xyz/tools?q={search_term_string}",
+        "query-input": "required name=search_term_string",
+      },
     },
-  };
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      name: "Zelve Tool AI",
+      url: "https://toolai.zelve.xyz",
+      logo: "https://toolai.zelve.xyz/og-image.svg",
+      description: "Free online AI-powered tools for developers, creators, and crypto enthusiasts.",
+      sameAs: [],
+    },
+  ];
 
   return (
     <html
