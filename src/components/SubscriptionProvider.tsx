@@ -47,10 +47,14 @@ export function SubscriptionProvider({ children }: { children: ReactNode }) {
             setTierState(t);
             setCurrentTier(data.tier);
             return;
+          } else {
+            setTierState(tiers_free);
+            setCurrentTier("free");
+            return;
           }
         }
       } catch {
-        // fallback to localStorage
+        // server unavailable, use localStorage
       }
       setTierState(getCurrentTier());
     };

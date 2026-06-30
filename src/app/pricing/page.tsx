@@ -257,15 +257,15 @@ export default function PricingPage() {
               <tr className="border-b border-zinc-800/50">
                 <td className="py-3 px-4 text-zinc-300 font-medium">AI Chat Messages</td>
                 <td className="text-center py-3 px-4 text-zinc-500">100/day</td>
-                <td className="text-center py-3 px-4 text-zinc-500">100,000/day</td>
+                <td className="text-center py-3 px-4 text-zinc-500">7,500/day</td>
                 <td className="text-center py-3 px-4 text-emerald-400">Unlimited</td>
                 <td className="text-center py-3 px-4 text-emerald-400">Unlimited</td>
                 <td className="text-center py-3 px-4 text-emerald-400">Unlimited</td>
               </tr>
               <tr className="border-b border-zinc-800/50">
                 <td className="py-3 px-4 text-zinc-300">AI Tools (Humanizer, QR, Image to Prompt, etc.)</td>
-                <td className="text-center py-3 px-4 text-zinc-500">2,500/day</td>
-                <td className="text-center py-3 px-4 text-zinc-500">100,000/day</td>
+                <td className="text-center py-3 px-4 text-zinc-500">1,200/day</td>
+                <td className="text-center py-3 px-4 text-zinc-500">7,500/day</td>
                 <td className="text-center py-3 px-4 text-emerald-400">Unlimited</td>
                 <td className="text-center py-3 px-4 text-emerald-400">Unlimited</td>
                 <td className="text-center py-3 px-4 text-emerald-400">Unlimited</td>

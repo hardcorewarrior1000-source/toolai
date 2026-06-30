@@ -46,7 +46,11 @@ export default function AccountPage() {
 
   const handleLogout = async () => {
     await fetch("/api/auth/logout", { method: "POST" });
-    router.push("/");
+    localStorage.removeItem("toolai_tier");
+    localStorage.removeItem("toolai_license");
+    localStorage.removeItem("toolai_usage");
+    localStorage.removeItem("zelve_ai_chat_usage");
+    window.location.href = "/";
   };
 
   const handleCopy = (text: string, label: string) => {
