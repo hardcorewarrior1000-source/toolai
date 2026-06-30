@@ -32,7 +32,7 @@ const MODELS: ModelConfig[] = [
   { id: "openai/gpt-oss-120b:free", name: "GPT-OSS 120B", tier: "enterprise", description: "Most powerful open-source model", provider: "openrouter" },
 ];
 
-const FREE_DAILY_LIMIT = 50;
+const FREE_DAILY_LIMIT = 10;
 const USAGE_KEY = "zelve_ai_chat_usage";
 
 function getTodayUsage(): number {
@@ -231,7 +231,7 @@ export default function ZelveAIChatPage() {
           Zelve <span className="text-emerald-400">AI Chat</span>
         </h1>
         <p className="text-zinc-400">
-          Chat with powerful AI models. {tier.id === "free" ? "Free tier includes 50 messages/day." : tier.id === "starter" ? "Starter plan: 500 messages/day." : "Unlimited messages with your plan."}
+          Chat with powerful AI models. {tier.id === "free" ? "Free tier includes 10 messages/day." : tier.id === "starter" ? "Starter plan: 100 messages/day." : tier.id === "pro" ? "Pro plan: 1,000 messages/day." : "Unlimited messages with your plan."}
         </p>
       </div>
 
@@ -368,7 +368,7 @@ export default function ZelveAIChatPage() {
       <div className="mt-8 grid grid-cols-1 sm:grid-cols-3 gap-4">
         <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-5">
           <div className="text-emerald-400 text-lg font-bold mb-1">Free</div>
-          <p className="text-zinc-500 text-xs mb-3">50 messages/day</p>
+          <p className="text-zinc-500 text-xs mb-3">10 messages/day</p>
           <p className="text-zinc-300 text-sm">Llama 3.1 8B</p>
           <p className="text-zinc-600 text-xs mt-1">Powered by Groq — ultra-fast</p>
         </div>
@@ -376,13 +376,13 @@ export default function ZelveAIChatPage() {
           <div className="absolute -top-2.5 left-1/2 -translate-x-1/2 bg-emerald-500 text-black text-[10px] font-bold px-2 py-0.5 rounded-full">POPULAR</div>
           <div className="text-emerald-400 text-lg font-bold mb-1">Pro</div>
           <p className="text-zinc-500 text-xs mb-3">$15/month</p>
-          <p className="text-zinc-300 text-sm">6 models — Llama 3.3 70B, Gemma 4, Nemotron, GPT-OSS</p>
-          <p className="text-zinc-600 text-xs mt-1">5,000 messages/day</p>
+          <p className="text-zinc-300 text-sm">5 models — Llama 3.3 70B, Nemotron, Gemma 4, GPT-OSS</p>
+          <p className="text-zinc-600 text-xs mt-1">1,000 messages/day</p>
         </div>
         <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-5">
           <div className="text-emerald-400 text-lg font-bold mb-1">Enterprise</div>
           <p className="text-zinc-500 text-xs mb-3">$99/month</p>
-          <p className="text-zinc-300 text-sm">All 7 models + priority routing</p>
+          <p className="text-zinc-300 text-sm">All 6 models + priority routing</p>
           <p className="text-zinc-600 text-xs mt-1">Unlimited messages</p>
         </div>
       </div>
