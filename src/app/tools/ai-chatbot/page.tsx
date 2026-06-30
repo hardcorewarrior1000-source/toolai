@@ -414,13 +414,16 @@ export default function AIChatbotPage() {
                     {config.name} · {config.models.find((m) => m.id === model)?.name || model}
                   </div>
                 )}
-                <div
-                  className={msg.role === "assistant" ? "prose prose-invert prose-sm max-w-none prose-headings:text-zinc-200 prose-p:text-zinc-300 prose-li:text-zinc-300 prose-strong:text-zinc-200 prose-code:text-emerald-400 prose-pre:bg-zinc-950 prose-pre:border prose-pre:border-zinc-700" : "whitespace-pre-wrap"}
-                  dangerouslySetInnerHTML={msg.role === "assistant" && msg.content ? { __html: marked.parse(msg.content) as string } : undefined}
-                >
-                  {msg.role === "user" && msg.content}
-                  {(!msg.content || msg.content === "") && loading && i === messages.length - 1 && <span className="animate-pulse">{"\u25CF"}</span>}
-                </div>
+                {msg.role === "assistant" && msg.content ? (
+                  <div
+                    className="prose prose-invert prose-sm max-w-none prose-headings:text-zinc-200 prose-p:text-zinc-300 prose-li:text-zinc-300 prose-strong:text-zinc-200 prose-code:text-emerald-400 prose-pre:bg-zinc-950 prose-pre:border prose-pre:border-zinc-700"
+                    dangerouslySetInnerHTML={{ __html: marked.parse(msg.content) as string }}
+                  />
+                ) : (
+                  <div className="whitespace-pre-wrap">
+                    {msg.content || (loading && i === messages.length - 1 ? <span className="animate-pulse">{"\u25CF"}</span> : "")}
+                  </div>
+                )}
                 {msg.role === "assistant" && msg.content && (
                   <button
                     onClick={() => copyMessage(msg.content)}
