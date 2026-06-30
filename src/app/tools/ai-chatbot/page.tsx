@@ -24,9 +24,9 @@ interface ModelConfig {
 }
 
 const MODELS: ModelConfig[] = [
-  { id: "llama-3.3-70b-versatile", name: "Llama 3.3 70B", tier: "free", description: "Meta's most capable free model — fast and smart", provider: "groq" },
   { id: "llama-3.1-8b-instant", name: "Llama 3.1 8B", tier: "free", description: "Lightning-fast responses, great for quick tasks", provider: "groq" },
-  { id: "gemma2-9b-it", name: "Gemma 2 9B", tier: "free", description: "Google's efficient model, good at reasoning", provider: "groq" },
+  { id: "gemma2-9b-it", name: "Gemma 2 9B", tier: "starter", description: "Google's efficient model, good at reasoning", provider: "groq" },
+  { id: "llama-3.3-70b-versatile", name: "Llama 3.3 70B", tier: "pro", description: "Meta's most capable model — fast and smart", provider: "groq" },
   { id: "nvidia/nemotron-3-super-120b-a12b:free", name: "Nemotron 3 Super", tier: "pro", description: "NVIDIA's 120B parameter powerhouse", provider: "openrouter" },
   { id: "google/gemma-4-26b-a4b-it:free", name: "Gemma 4 26B", tier: "pro", description: "Google's latest, great for creative tasks", provider: "openrouter" },
   { id: "openai/gpt-oss-20b:free", name: "GPT-OSS 20B", tier: "pro", description: "OpenAI's open-source model", provider: "openrouter" },
@@ -83,7 +83,8 @@ export default function ZelveAIChatPage() {
 
   const canUseModel = useCallback((modelTier: string) => {
     if (tierLevel >= 4) return true;
-    if (tierLevel >= 3 && (modelTier === "free" || modelTier === "pro")) return true;
+    if (tierLevel >= 3 && (modelTier === "free" || modelTier === "starter" || modelTier === "pro")) return true;
+    if (tierLevel >= 2 && (modelTier === "free" || modelTier === "starter")) return true;
     if (modelTier === "free") return true;
     return false;
   }, [tierLevel]);
@@ -369,20 +370,20 @@ export default function ZelveAIChatPage() {
         <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-5">
           <div className="text-emerald-400 text-lg font-bold mb-1">Free</div>
           <p className="text-zinc-500 text-xs mb-3">50 messages/day</p>
-          <p className="text-zinc-300 text-sm">Llama 3.3 70B, Llama 3.1 8B, Gemma 2 9B</p>
-          <p className="text-zinc-600 text-xs mt-1">Powered by Groq — ultra-fast inference</p>
+          <p className="text-zinc-300 text-sm">Llama 3.1 8B</p>
+          <p className="text-zinc-600 text-xs mt-1">Powered by Groq — ultra-fast</p>
         </div>
         <div className="bg-zinc-900 border border-emerald-500/30 rounded-xl p-5 relative">
           <div className="absolute -top-2.5 left-1/2 -translate-x-1/2 bg-emerald-500 text-black text-[10px] font-bold px-2 py-0.5 rounded-full">POPULAR</div>
           <div className="text-emerald-400 text-lg font-bold mb-1">Pro</div>
           <p className="text-zinc-500 text-xs mb-3">$15/month</p>
-          <p className="text-zinc-300 text-sm">6 models — Groq + OpenRouter</p>
+          <p className="text-zinc-300 text-sm">6 models — Llama 3.3 70B, Gemma 4, Nemotron, GPT-OSS</p>
           <p className="text-zinc-600 text-xs mt-1">5,000 messages/day</p>
         </div>
         <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-5">
           <div className="text-emerald-400 text-lg font-bold mb-1">Enterprise</div>
           <p className="text-zinc-500 text-xs mb-3">$99/month</p>
-          <p className="text-zinc-300 text-sm">All 7 models + priority</p>
+          <p className="text-zinc-300 text-sm">All 7 models + priority routing</p>
           <p className="text-zinc-600 text-xs mt-1">Unlimited messages</p>
         </div>
       </div>
