@@ -1,6 +1,11 @@
+"use client";
+
 import Link from "next/link";
+import { useLocale } from "@/i18n/provider";
 
 export default function Footer() {
+  const { t } = useLocale();
+
   return (
     <footer className="border-t border-zinc-800/60 bg-zinc-950/80 mt-16">
       <div className="max-w-6xl mx-auto px-4 py-12">
@@ -10,12 +15,12 @@ export default function Footer() {
               Zelve <span className="text-emerald-400">Tool AI</span>
             </Link>
             <p className="text-zinc-500 text-sm mt-2 leading-relaxed">
-              Free online tools for developers, creators, and crypto enthusiasts. No signup required.
+              {t.footer.description}
             </p>
           </div>
 
           <div>
-            <h4 className="text-sm font-semibold text-zinc-300 mb-3">AI Tools</h4>
+            <h4 className="text-sm font-semibold text-zinc-300 mb-3">{t.footer.aiTools}</h4>
             <div className="space-y-2 text-sm">
               <Link href="/tools/ai-chatbot" className="block text-zinc-500 hover:text-emerald-400 transition-colors">AI Chatbot</Link>
               <Link href="/tools/ai-humanizer" className="block text-zinc-500 hover:text-emerald-400 transition-colors">AI Humanizer</Link>
@@ -26,7 +31,7 @@ export default function Footer() {
           </div>
 
           <div>
-            <h4 className="text-sm font-semibold text-zinc-300 mb-3">Crypto Tools</h4>
+            <h4 className="text-sm font-semibold text-zinc-300 mb-3">{t.footer.cryptoTools}</h4>
             <div className="space-y-2 text-sm">
               <Link href="/tools/crypto-price-calculator" className="block text-zinc-500 hover:text-emerald-400 transition-colors">Price Calculator</Link>
               <Link href="/tools/eth-gas-estimator" className="block text-zinc-500 hover:text-emerald-400 transition-colors">Gas Fee Estimator</Link>
@@ -36,12 +41,12 @@ export default function Footer() {
           </div>
 
           <div>
-            <h4 className="text-sm font-semibold text-zinc-300 mb-3">Company</h4>
+            <h4 className="text-sm font-semibold text-zinc-300 mb-3">{t.footer.company}</h4>
             <div className="space-y-2 text-sm">
-              <Link href="/about" className="block text-zinc-500 hover:text-emerald-400 transition-colors">About</Link>
-              <Link href="/blog" className="block text-zinc-500 hover:text-emerald-400 transition-colors">Blog</Link>
-              <Link href="/pricing" className="block text-zinc-500 hover:text-emerald-400 transition-colors">Pricing</Link>
-              <Link href="/privacy" className="block text-zinc-500 hover:text-emerald-400 transition-colors">Privacy Policy</Link>
+              <Link href="/about" className="block text-zinc-500 hover:text-emerald-400 transition-colors">{t.common.about}</Link>
+              <Link href="/blog" className="block text-zinc-500 hover:text-emerald-400 transition-colors">{t.common.blog}</Link>
+              <Link href="/pricing" className="block text-zinc-500 hover:text-emerald-400 transition-colors">{t.common.pricing}</Link>
+              <Link href="/privacy" className="block text-zinc-500 hover:text-emerald-400 transition-colors">{t.common.privacy}</Link>
             </div>
           </div>
         </div>
@@ -49,11 +54,11 @@ export default function Footer() {
         <div className="section-divider mb-6" />
 
         <div className="flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-zinc-600">
-          <p>&copy; {new Date().getFullYear()} Zelve Tool AI. All rights reserved.</p>
+          <p>&copy; {new Date().getFullYear()} Zelve Tool AI. {t.footer.copyright}</p>
           <div className="flex items-center gap-4">
-            <span>Built with Next.js &amp; Tailwind CSS</span>
+            <span>{t.footer.builtWith}</span>
             <span className="text-zinc-700">|</span>
-            <span>Deployed on Cloudflare</span>
+            <span>{t.footer.deployedOn}</span>
           </div>
         </div>
       </div>

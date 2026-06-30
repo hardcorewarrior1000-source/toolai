@@ -5,6 +5,8 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import CookieConsent from "@/components/CookieConsent";
 import { SubscriptionProvider } from "@/components/SubscriptionProvider";
+import { LocaleProvider } from "@/i18n/provider";
+import { type Locale, isValidLocale, defaultLocale } from "@/i18n/config";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -18,14 +20,14 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: {
-    default: "Zelve Tool AI — Free Online AI Tools",
-    template: "%s — Zelve Tool AI",
+    default: "Zelve Tool AI \u2014 Free Online AI Tools",
+    template: "%s \u2014 Zelve Tool AI",
   },
   description:
     "Free online AI-powered tools: AI humanizer, color palette generator, gradient generator, QR code generator, crypto tools, and more. No signup required.",
   metadataBase: new URL("https://toolai.zelve.xyz"),
   openGraph: {
-    title: "Zelve Tool AI — Free Online AI Tools",
+    title: "Zelve Tool AI \u2014 Free Online AI Tools",
     description:
       "Free online AI-powered tools: AI humanizer, color palette generator, gradient generator, QR code generator, crypto tools, and more.",
     type: "website",
@@ -34,46 +36,34 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Zelve Tool AI — Free Online AI Tools",
+    title: "Zelve Tool AI \u2014 Free Online AI Tools",
     description:
       "Free online AI-powered tools: AI humanizer, color palette generator, gradient generator, QR code generator, crypto tools, and more.",
   },
   keywords: [
-    "AI tools",
-    "free online tools",
-    "AI humanizer",
-    "color palette generator",
-    "gradient generator",
-    "image to base64",
-    "word counter",
-    "QR code generator",
-    "image to prompt",
-    "text to slug",
-    "crypto tools",
-    "bitcoin address validator",
-    "ethereum gas fee",
-    "crypto price calculator",
-    "wallet balance checker",
-    "BIP39 mnemonic generator",
-    "crypto payment link",
-    "ETH to wei converter",
+    "AI tools", "free online tools", "AI humanizer", "color palette generator",
+    "gradient generator", "image to base64", "word counter", "QR code generator",
+    "image to prompt", "text to slug", "crypto tools", "bitcoin address validator",
+    "ethereum gas fee", "crypto price calculator", "wallet balance checker",
+    "BIP39 mnemonic generator", "crypto payment link", "ETH to wei converter",
   ],
-  robots: {
-    index: true,
-    follow: true,
-  },
-  verification: {
-    google: "TO7QzwDVoKUHbAoYmk68ZbdSo-7lOHDOzf0tEBE9RFc",
-  },
+  robots: { index: true, follow: true },
+  verification: { google: "TO7QzwDVoKUHbAoYmk68ZbdSo-7lOHDOzf0tEBE9RFc" },
 };
 
 const gaId = process.env.NEXT_PUBLIC_GA_ID;
+
+function getLocale(): Locale {
+  return defaultLocale;
+}
 
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const locale = getLocale();
+
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "WebSite",
@@ -89,7 +79,7 @@ export default function RootLayout({
 
   return (
     <html
-      lang="en"
+      lang={locale}
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <head>
@@ -109,12 +99,14 @@ export default function RootLayout({
         />
       </head>
       <body className="min-h-full flex flex-col bg-zinc-950 text-zinc-100">
-        <SubscriptionProvider>
-          <Header />
-          <main className="flex-1">{children}</main>
-          <Footer />
-          <CookieConsent />
-        </SubscriptionProvider>
+        <LocaleProvider locale={locale}>
+          <SubscriptionProvider>
+            <Header />
+            <main className="flex-1">{children}</main>
+            <Footer />
+            <CookieConsent />
+          </SubscriptionProvider>
+        </LocaleProvider>
       </body>
     </html>
   );

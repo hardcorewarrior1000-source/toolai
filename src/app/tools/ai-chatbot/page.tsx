@@ -3,9 +3,9 @@
 import AdBanner from "@/components/AdBanner";
 import InContentAd from "@/components/InContentAd";
 
-import { useState, useRef, useEffect, type FormEvent } from "react";
+import { useState, useRef, useEffect, useCallback, type FormEvent } from "react";
 
-type Provider = "openai" | "openrouter" | "gemini" | "custom";
+type Provider = "openrouter" | "openai" | "gemini" | "custom";
 
 interface Message {
   role: "user" | "assistant";
@@ -18,20 +18,12 @@ interface ProviderConfig {
   placeholder: string;
   keyPrefix: string;
   baseUrl?: string;
+  defaultKey?: string;
 }
 
+const DEFAULT_OPENROUTER_KEY = process.env.NEXT_PUBLIC_DEFAULT_OPENROUTER_KEY || "";
+
 const PROVIDERS: Record<Provider, ProviderConfig> = {
-  openai: {
-    name: "OpenAI",
-    models: [
-      { id: "gpt-4o", name: "GPT-4o" },
-      { id: "gpt-4o-mini", name: "GPT-4o Mini" },
-      { id: "gpt-4-turbo", name: "GPT-4 Turbo" },
-      { id: "gpt-3.5-turbo", name: "GPT-3.5 Turbo" },
-    ],
-    placeholder: "sk-...",
-    keyPrefix: "sk-",
-  },
   openrouter: {
     name: "OpenRouter",
     models: [
@@ -47,6 +39,18 @@ const PROVIDERS: Record<Provider, ProviderConfig> = {
     placeholder: "sk-or-...",
     keyPrefix: "sk-or-",
     baseUrl: "https://openrouter.ai/api/v1",
+    defaultKey: DEFAULT_OPENROUTER_KEY,
+  },
+  openai: {
+    name: "OpenAI",
+    models: [
+      { id: "gpt-4o", name: "GPT-4o" },
+      { id: "gpt-4o-mini", name: "GPT-4o Mini" },
+      { id: "gpt-4-turbo", name: "GPT-4 Turbo" },
+      { id: "gpt-3.5-turbo", name: "GPT-3.5 Turbo" },
+    ],
+    placeholder: "sk-...",
+    keyPrefix: "sk-",
   },
   gemini: {
     name: "Google Gemini",
@@ -71,9 +75,9 @@ const PROVIDERS: Record<Provider, ProviderConfig> = {
 };
 
 export default function AIChatbotPage() {
-  const [provider, setProvider] = useState<Provider>("openai");
-  const [apiKey, setApiKey] = useState("");
-  const [model, setModel] = useState("gpt-4o-mini");
+  const [provider, setProvider] = useState<Provider>("openrouter");
+  const [apiKey, setApiKey] = useState(DEFAULT_OPENROUTER_KEY);
+  const [model, setModel] = useState("meta-llama/llama-3.2-3b-instruct:free");
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
@@ -81,11 +85,28 @@ export default function AIChatbotPage() {
   const [keyVisible, setKeyVisible] = useState(false);
   const [customModel, setCustomModel] = useState("");
   const [baseUrl, setBaseUrl] = useState("");
-  const messagesEndRef = useRef<HTMLDivElement>(null);
+  const scrollRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
+  const isAutoScroll = useRef(true);
+
+  const checkScroll = useCallback(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+    const atBottom = el.scrollHeight - el.scrollTop - el.clientHeight < 100;
+    isAutoScroll.current = atBottom;
+  }, []);
 
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    const el = scrollRef.current;
+    if (!el) return;
+    el.addEventListener("scroll", checkScroll, { passive: true });
+    return () => el.removeEventListener("scroll", checkScroll);
+  }, [checkScroll]);
+
+  useEffect(() => {
+    if (isAutoScroll.current && scrollRef.current) {
+      scrollRef.current.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" });
+    }
   }, [messages]);
 
   useEffect(() => {
@@ -93,6 +114,11 @@ export default function AIChatbotPage() {
     setBaseUrl(PROVIDERS[provider].baseUrl || "");
     setCustomModel("");
     setError("");
+    if (PROVIDERS[provider].defaultKey) {
+      setApiKey(PROVIDERS[provider].defaultKey);
+    } else {
+      setApiKey("");
+    }
   }, [provider]);
 
   const getKeyPreview = () => {
@@ -101,24 +127,25 @@ export default function AIChatbotPage() {
     return apiKey.slice(0, 4) + "\u2022\u2022\u2022\u2022" + apiKey.slice(-4);
   };
 
-  async function streamOpenAI(messages: Message[], model: string, key: string, baseUrl?: string): Promise<string> {
-    const url = (baseUrl || "https://api.openai.com") + "/chat/completions";
-    const res = await fetch(url, {
+  async function streamOpenAI(msgs: Message[], mdl: string, key: string, url?: string): Promise<string> {
+    const endpoint = (url || "https://api.openai.com") + "/chat/completions";
+    const res = await fetch(endpoint, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${key}`,
+        ...(url?.includes("openrouter.ai") ? { "HTTP-Referer": "https://toolai.zelve.xyz", "X-Title": "Zelve Tool AI" } : {}),
       },
       body: JSON.stringify({
-        model,
-        messages: messages.map((m) => ({ role: m.role, content: m.content })),
+        model: mdl,
+        messages: msgs.map((m) => ({ role: m.role, content: m.content })),
         stream: true,
       }),
     });
 
     if (!res.ok) {
       const err = await res.json().catch(() => ({}));
-      throw new Error(err.error?.message || `OpenAI API error ${res.status}`);
+      throw new Error(err.error?.message || `API error ${res.status}`);
     }
 
     const reader = res.body?.getReader();
@@ -160,14 +187,14 @@ export default function AIChatbotPage() {
     return full;
   }
 
-  async function streamGemini(messages: Message[], model: string, key: string): Promise<string> {
-    const contents = messages.map((m) => ({
+  async function streamGemini(msgs: Message[], mdl: string, key: string): Promise<string> {
+    const contents = msgs.map((m) => ({
       role: m.role === "assistant" ? "model" : "user",
       parts: [{ text: m.content }],
     }));
 
     const res = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/${model}:streamGenerateContent?alt=sse`,
+      `https://generativelanguage.googleapis.com/v1beta/models/${mdl}:streamGenerateContent?alt=sse`,
       {
         method: "POST",
         headers: {
@@ -227,6 +254,7 @@ export default function AIChatbotPage() {
     const userMsg = input.trim();
     setInput("");
     setError("");
+    isAutoScroll.current = true;
 
     const newMessages = [...messages, { role: "user" as const, content: userMsg }, { role: "assistant" as const, content: "" }];
     setMessages(newMessages);
@@ -234,9 +262,8 @@ export default function AIChatbotPage() {
 
     try {
       const effectiveModel = provider === "custom" ? customModel.trim() : model;
-      if (!effectiveModel) {
-        throw new Error("Please enter a model ID");
-      }
+      if (!effectiveModel) throw new Error("Please enter a model ID");
+
       if (provider === "gemini") {
         await streamGemini(newMessages.slice(0, -1), effectiveModel, apiKey.trim());
       } else {
@@ -264,7 +291,7 @@ export default function AIChatbotPage() {
     <div className="max-w-4xl mx-auto px-4 py-12">
       <h1 className="text-3xl font-bold text-white mb-2">AI Chatbot Playground</h1>
       <p className="text-zinc-400 mb-8">
-        Paste your API key, pick a model, and chat with AI directly in your browser. Your keys never leave your device.
+        Chat with AI directly in your browser. OpenRouter free models are pre-configured — no API key needed to start.
       </p>
 
       <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-6 mb-6">
@@ -272,7 +299,7 @@ export default function AIChatbotPage() {
           <div>
             <label className="block text-sm font-medium text-zinc-300 mb-2">Provider</label>
             <div className="flex gap-2 flex-wrap">
-              {(["openai", "openrouter", "gemini", "custom"] as Provider[]).map((p) => (
+              {(["openrouter", "openai", "gemini", "custom"] as Provider[]).map((p) => (
                 <button
                   key={p}
                   onClick={() => setProvider(p)}
@@ -310,7 +337,10 @@ export default function AIChatbotPage() {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-zinc-300 mb-2">API Key</label>
+            <label className="block text-sm font-medium text-zinc-300 mb-2">
+              API Key
+              {provider === "openrouter" && <span className="text-emerald-400 ml-1">(pre-filled)</span>}
+            </label>
             <div className="relative">
               <input
                 type={keyVisible ? "text" : "password"}
@@ -332,7 +362,7 @@ export default function AIChatbotPage() {
           </div>
         </div>
 
-        {(provider === "custom") && (
+        {provider === "custom" && (
           <div className="mb-4">
             <label className="block text-sm font-medium text-zinc-300 mb-2">Base URL</label>
             <input
@@ -349,7 +379,7 @@ export default function AIChatbotPage() {
         <div className="flex items-center gap-3 text-xs text-zinc-500">
           <span className="flex items-center gap-1">
             <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
-            Keys stored in browser only
+            {provider === "openrouter" ? "Free models — no billing required" : "Keys stored in browser only"}
           </span>
           <span>|</span>
           <span>No data sent to Zelve Tool AI servers</span>
@@ -357,12 +387,14 @@ export default function AIChatbotPage() {
       </div>
 
       <div className="bg-zinc-900 border border-zinc-800 rounded-xl overflow-hidden">
-        <div className="h-[500px] overflow-y-auto p-4 space-y-4" id="chat-scroll">
+        <div ref={scrollRef} className="h-[500px] overflow-y-auto p-4 space-y-4">
           {messages.length === 0 && (
             <div className="flex flex-col items-center justify-center h-full text-zinc-600">
               <span className="text-4xl mb-3">{"\uD83D\uDCAC"}</span>
               <p className="text-sm">Start a conversation by typing a message below</p>
-              <p className="text-xs mt-1">Make sure your API key is valid and has sufficient credits</p>
+              {provider === "openrouter" && (
+                <p className="text-xs mt-1 text-emerald-500/60">Free models are pre-selected — just type and send</p>
+              )}
             </div>
           )}
 
@@ -391,7 +423,6 @@ export default function AIChatbotPage() {
               </div>
             </div>
           ))}
-          <div ref={messagesEndRef} />
         </div>
 
         {error && (
@@ -407,14 +438,13 @@ export default function AIChatbotPage() {
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={(e) => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); send(e); } }}
-              placeholder={apiKey.trim() ? "Type your message..." : "Enter your API key first..."}
-              disabled={!apiKey.trim()}
+              placeholder="Type your message..."
               rows={1}
-              className="flex-1 bg-zinc-950 border border-zinc-700 rounded-lg px-4 py-2.5 text-white text-sm placeholder-zinc-600 focus:outline-none focus:border-emerald-500/50 transition-colors resize-none disabled:opacity-50"
+              className="flex-1 bg-zinc-950 border border-zinc-700 rounded-lg px-4 py-2.5 text-white text-sm placeholder-zinc-600 focus:outline-none focus:border-emerald-500/50 transition-colors resize-none"
             />
             <button
               type="submit"
-              disabled={!input.trim() || !apiKey.trim() || loading}
+              disabled={!input.trim() || loading}
               className="px-5 py-2.5 bg-emerald-600 hover:bg-emerald-500 disabled:bg-zinc-700 disabled:text-zinc-500 text-white rounded-lg font-medium text-sm transition-colors"
             >
               {loading ? "\u25CF\u25CF\u25CF" : "Send"}
@@ -429,21 +459,24 @@ export default function AIChatbotPage() {
               </button>
             )}
           </div>
+          <p className="text-[10px] text-zinc-600 mt-2">Enter to send, Shift+Enter for new line</p>
         </form>
       </div>
+
+      <InContentAd />
 
       <div className="mt-8 bg-zinc-900 border border-zinc-800 rounded-xl p-6">
         <h2 className="text-lg font-semibold text-white mb-3">Supported Providers</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
           <div>
+            <p className="text-emerald-400 font-medium mb-1">OpenRouter (Recommended)</p>
+            <p className="text-zinc-400">5+ free models (Llama, Hermes, Qwen, Gemma) + paid (GPT-4o, Claude)</p>
+            <p className="text-zinc-500 text-xs mt-1">Pre-configured with free access — start chatting immediately</p>
+          </div>
+          <div>
             <p className="text-emerald-400 font-medium mb-1">OpenAI</p>
             <p className="text-zinc-400">GPT-4o, GPT-4o Mini, GPT-4 Turbo, GPT-3.5 Turbo</p>
             <p className="text-zinc-500 text-xs mt-1">Requires OpenAI API key (platform.openai.com)</p>
-          </div>
-          <div>
-            <p className="text-emerald-400 font-medium mb-1">OpenRouter</p>
-            <p className="text-zinc-400">5+ free models (Llama, Hermes, Qwen, Gemma) + paid (GPT-4o, Claude)</p>
-            <p className="text-zinc-500 text-xs mt-1">Free API key at openrouter.ai/keys — free models cost $0</p>
           </div>
           <div>
             <p className="text-emerald-400 font-medium mb-1">Google Gemini</p>
@@ -458,9 +491,11 @@ export default function AIChatbotPage() {
         </div>
         <div className="mt-4 p-3 bg-zinc-950 border border-zinc-800 rounded-lg text-xs text-zinc-500">
           <p className="font-medium text-zinc-400 mb-1">{"\uD83D\uDD12"} Privacy Notice</p>
-          <p>Your API key is stored only in your browser&apos;s memory and is sent directly to the AI provider. Zelve Tool AI never sees, stores, or transmits your key. Clearing your browser data or clicking &quot;Clear&quot; removes all chat history.</p>
+          <p>Your API key is stored only in your browser&apos;s memory and is sent directly to the AI provider. Zelve Tool AI never sees, stores, or transmits your key. The pre-filled OpenRouter key is shared for free model access only.</p>
         </div>
       </div>
+
+      <AdBanner />
     </div>
   );
 }
