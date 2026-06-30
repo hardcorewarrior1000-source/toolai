@@ -27,9 +27,8 @@ const PROVIDERS: Record<Provider, ProviderConfig> = {
   openrouter: {
     name: "OpenRouter",
     models: [
-      { id: "google/gemma-4-31b-it:free", name: "Gemma 4 31B (Free)" },
-      { id: "google/gemma-4-26b-a4b-it:free", name: "Gemma 4 26B (Free)" },
       { id: "nvidia/nemotron-3-super-120b-a12b:free", name: "Nemotron 3 Super (Free)" },
+      { id: "google/gemma-4-26b-a4b-it:free", name: "Gemma 4 26B (Free)" },
       { id: "openai/gpt-oss-120b:free", name: "GPT-OSS 120B (Free)" },
       { id: "openai/gpt-oss-20b:free", name: "GPT-OSS 20B (Free)" },
     ],
@@ -74,7 +73,7 @@ const PROVIDERS: Record<Provider, ProviderConfig> = {
 export default function AIChatbotPage() {
   const [provider, setProvider] = useState<Provider>("openrouter");
   const [apiKey, setApiKey] = useState(DEFAULT_OPENROUTER_KEY);
-  const [model, setModel] = useState("google/gemma-4-31b-it:free");
+  const [model, setModel] = useState("nvidia/nemotron-3-super-120b-a12b:free");
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
@@ -336,25 +335,29 @@ export default function AIChatbotPage() {
           <div>
             <label className="block text-sm font-medium text-zinc-300 mb-2">
               API Key
-              {provider === "openrouter" && <span className="text-emerald-400 ml-1">(pre-filled)</span>}
+              {provider === "openrouter" && <span className="text-emerald-400 ml-1">(pre-configured)</span>}
             </label>
-            <div className="relative">
-              <input
-                type={keyVisible ? "text" : "password"}
-                value={apiKey}
-                onChange={(e) => setApiKey(e.target.value)}
-                placeholder={config.placeholder}
-                className="w-full bg-zinc-950 border border-zinc-700 rounded-lg px-3 py-2 pr-16 text-white font-mono text-sm placeholder-zinc-600 focus:outline-none focus:border-emerald-500/50 transition-colors"
-              />
-              <button
-                onClick={() => setKeyVisible(!keyVisible)}
-                className="absolute right-2 top-1/2 -translate-y-1/2 text-xs text-zinc-500 hover:text-zinc-300 px-1.5 py-0.5"
-              >
-                {keyVisible ? "Hide" : "Show"}
-              </button>
-            </div>
-            {apiKey && (
-              <p className="text-[10px] text-zinc-600 mt-1 font-mono">{getKeyPreview()}</p>
+            {provider === "openrouter" ? (
+              <div className="w-full bg-zinc-950 border border-zinc-700 rounded-lg px-3 py-2 text-zinc-500 text-sm flex items-center gap-2">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+                Free access pre-configured — no key needed
+              </div>
+            ) : (
+              <div className="relative">
+                <input
+                  type={keyVisible ? "text" : "password"}
+                  value={apiKey}
+                  onChange={(e) => setApiKey(e.target.value)}
+                  placeholder={config.placeholder}
+                  className="w-full bg-zinc-950 border border-zinc-700 rounded-lg px-3 py-2 pr-16 text-white font-mono text-sm placeholder-zinc-600 focus:outline-none focus:border-emerald-500/50 transition-colors"
+                />
+                <button
+                  onClick={() => setKeyVisible(!keyVisible)}
+                  className="absolute right-2 top-1/2 -translate-y-1/2 text-xs text-zinc-500 hover:text-zinc-300 px-1.5 py-0.5"
+                >
+                  {keyVisible ? "Hide" : "Show"}
+                </button>
+              </div>
             )}
           </div>
         </div>
