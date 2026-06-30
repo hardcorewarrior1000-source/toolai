@@ -30,6 +30,7 @@ export default function Header() {
 
         <nav className="hidden md:flex items-center gap-1 text-sm text-zinc-400">
           <Link href="/" className="hover:text-white transition-colors px-2.5 py-1.5 rounded-lg whitespace-nowrap">{t.common.home}</Link>
+          <Link href="/tools/ai-chatbot" className="hover:text-white transition-colors px-2.5 py-1.5 rounded-lg whitespace-nowrap">AI Chat</Link>
           <Link href="/tools/ai-humanizer" className="hover:text-white transition-colors px-2.5 py-1.5 rounded-lg whitespace-nowrap">AI Humanizer</Link>
           <Link href="/tools/crypto-price-calculator" className="hover:text-white transition-colors px-2.5 py-1.5 rounded-lg whitespace-nowrap">Crypto</Link>
           <Link href="/blog" className="hover:text-white transition-colors px-2.5 py-1.5 rounded-lg whitespace-nowrap">{t.common.blog}</Link>

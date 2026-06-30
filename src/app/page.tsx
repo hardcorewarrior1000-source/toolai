@@ -4,7 +4,7 @@ import InContentAd from "@/components/InContentAd";
 import Link from "next/link";
 
 const aiTools = [
-  { title: "AI Chatbot Playground", description: "Paste your API key and chat with GPT-4o or Gemini directly in your browser. Streaming responses.", href: "/tools/ai-chatbot", icon: "\uD83D\uDCAC" },
+  { title: "Zelve AI Chat", description: "Chat with AI models for free — Nemotron, Gemma, and GPT-OSS. No API key needed, 100 messages/day.", href: "/tools/ai-chatbot", icon: "\uD83D\uDCAC" },
   { title: "AI to Human Text", description: "Convert AI-generated text to sound more natural and human-like with 60+ transformation rules.", href: "/tools/ai-humanizer", icon: "\uD83E\uDD16" },
   { title: "Color Palette from Image", description: "Upload an image and extract a beautiful color palette instantly.", href: "/tools/color-palette", icon: "\uD83C\uDFA8" },
   { title: "Gradient Generator", description: "Create stunning CSS gradients with a visual drag-and-drop editor.", href: "/tools/gradient-generator", icon: "\uD83C\uDF08" },

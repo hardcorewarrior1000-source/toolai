@@ -1,0 +1,141 @@
+{
+  "routes": [
+    {
+      "routePath": "/api/auth/login",
+      "mountPath": "/api/auth",
+      "method": "OPTIONS",
+      "module": [
+        "api/auth/login.ts:onRequestOptions"
+      ]
+    },
+    {
+      "routePath": "/api/auth/login",
+      "mountPath": "/api/auth",
+      "method": "POST",
+      "module": [
+        "api/auth/login.ts:onRequestPost"
+      ]
+    },
+    {
+      "routePath": "/api/auth/logout",
+      "mountPath": "/api/auth",
+      "method": "OPTIONS",
+      "module": [
+        "api/auth/logout.ts:onRequestOptions"
+      ]
+    },
+    {
+      "routePath": "/api/auth/logout",
+      "mountPath": "/api/auth",
+      "method": "POST",
+      "module": [
+        "api/auth/logout.ts:onRequestPost"
+      ]
+    },
+    {
+      "routePath": "/api/auth/me",
+      "mountPath": "/api/auth",
+      "method": "GET",
+      "module": [
+        "api/auth/me.ts:onRequestGet"
+      ]
+    },
+    {
+      "routePath": "/api/auth/me",
+      "mountPath": "/api/auth",
+      "method": "OPTIONS",
+      "module": [
+        "api/auth/me.ts:onRequestOptions"
+      ]
+    },
+    {
+      "routePath": "/api/auth/signup",
+      "mountPath": "/api/auth",
+      "method": "OPTIONS",
+      "module": [
+        "api/auth/signup.ts:onRequestOptions"
+      ]
+    },
+    {
+      "routePath": "/api/auth/signup",
+      "mountPath": "/api/auth",
+      "method": "POST",
+      "module": [
+        "api/auth/signup.ts:onRequestPost"
+      ]
+    },
+    {
+      "routePath": "/api/license/activate",
+      "mountPath": "/api/license",
+      "method": "OPTIONS",
+      "module": [
+        "api/license/activate.ts:onRequestOptions"
+      ]
+    },
+    {
+      "routePath": "/api/license/activate",
+      "mountPath": "/api/license",
+      "method": "POST",
+      "module": [
+        "api/license/activate.ts:onRequestPost"
+      ]
+    },
+    {
+      "routePath": "/api/license/master",
+      "mountPath": "/api/license",
+      "method": "OPTIONS",
+      "module": [
+        "api/license/master.ts:onRequestOptions"
+      ]
+    },
+    {
+      "routePath": "/api/license/master",
+      "mountPath": "/api/license",
+      "method": "POST",
+      "module": [
+        "api/license/master.ts:onRequestPost"
+      ]
+    },
+    {
+      "routePath": "/api/license/track",
+      "mountPath": "/api/license",
+      "method": "OPTIONS",
+      "module": [
+        "api/license/track.ts:onRequestOptions"
+      ]
+    },
+    {
+      "routePath": "/api/license/track",
+      "mountPath": "/api/license",
+      "method": "POST",
+      "module": [
+        "api/license/track.ts:onRequestPost"
+      ]
+    },
+    {
+      "routePath": "/api/license/validate",
+      "mountPath": "/api/license",
+      "method": "GET",
+      "module": [
+        "api/license/validate.ts:onRequestGet"
+      ]
+    },
+    {
+      "routePath": "/api/license/validate",
+      "mountPath": "/api/license",
+      "method": "OPTIONS",
+      "module": [
+        "api/license/validate.ts:onRequestOptions"
+      ]
+    },
+    {
+      "routePath": "/api/health",
+      "mountPath": "/api",
+      "method": "",
+      "module": [
+        "api/health.ts:onRequest"
+      ]
+    }
+  ],
+  "baseURL": "/"
+}
