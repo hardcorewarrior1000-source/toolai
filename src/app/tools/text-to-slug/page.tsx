@@ -1,96 +1,51 @@
-"use client";
+import type { Metadata } from "next";
+import TextToSlugTool from "./ToolClient";
+import SEOContent from "@/components/SEOContent";
 
-import { useState, type ChangeEvent } from "react";
-import AdBanner from "@/components/AdBanner";
-import InContentAd from "@/components/InContentAd";
-import TipJar from "@/components/TipJar";
+export const metadata: Metadata = {
+  title: "Free Text to URL Slug Generator | Zelve Tool AI",
+  description: "Convert any text into a clean URL slug instantly. Choose separator style and toggle lowercase. Perfect for SEO-friendly URLs. Free and fast.",
+  keywords: ["slug generator", "URL slug", "text to slug", "SEO slug", "URL generator", "clean URL", "Zelve slug generator"],
+  openGraph: {
+    title: "Free Text to URL Slug Generator",
+    description: "Convert any text into a clean URL slug instantly. Choose separator style and toggle lowercase.",
+    type: "website",
+    siteName: "Zelve Tool AI",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Free Text to URL Slug Generator",
+    description: "Convert any text into a clean URL slug instantly. Choose separator style and toggle lowercase.",
+  },
+};
 
 export default function TextToSlugPage() {
-  const [input, setInput] = useState("");
-  const [separator, setSeparator] = useState("-");
-  const [lowercase, setLowercase] = useState(true);
-
-  const handleInput = (e: ChangeEvent<HTMLInputElement>) => {
-    setInput(e.target.value);
-  };
-
-  const slug = (lowercase ? input.trim().toLowerCase() : input.trim())
-    .replace(/[^\w\s-]/g, "")
-    .replace(/\s+/g, separator)
-    .replace(/-+/g, separator)
-    .replace(/^-+|-+$/g, "");
-
-  const copySlug = () => {
-    navigator.clipboard.writeText(slug);
-  };
-
   return (
-    <div className="max-w-3xl mx-auto px-4 py-12">
-      <h1 className="text-3xl font-bold text-white mb-2">Text to URL Slug Converter</h1>
-      <p className="text-zinc-400 mb-8">
-        Convert any text into a clean, SEO-friendly URL slug.
-      </p>
-
-      <input
-        type="text"
-        value={input}
-        onChange={handleInput}
-        placeholder="Type your text here..."
-        className="w-full bg-zinc-900 border border-zinc-700 rounded-lg p-4 text-zinc-100 placeholder-zinc-600 focus:outline-none focus:ring-2 focus:ring-emerald-500 mb-4"
+    <>
+      <TextToSlugTool />
+      <SEOContent
+        title="About the URL Slug Generator"
+        description="The URL Slug Generator converts any text into a clean, SEO-friendly URL slug. It strips special characters, collapses whitespace, and applies your preferred separator style. Use it to create clean URLs for blog posts, product pages, or any web content."
+        features={[
+          "Real-time slug generation as you type",
+          "3 separator styles: hyphen, underscore, or no separator",
+          "Lowercase toggle for consistent URL formatting",
+          "Strips special characters and extra whitespace",
+          "One-click copy to clipboard",
+          "Instant preview of the generated slug",
+        ]}
+        howToUse={[
+          "Type or paste your text into the input field.",
+          "Choose a separator style (hyphen is standard for SEO).",
+          "Toggle lowercase on or off as needed.",
+          "Copy the generated slug with one click.",
+        ]}
+        faq={[
+          { question: "What is a URL slug?", answer: "A URL slug is the part of a URL that identifies a specific page. For example, in 'example.com/my-blog-post', 'my-blog-post' is the slug. Clean slugs improve SEO and readability." },
+          { question: "Which separator should I use?", answer: "Hyphens (-) are the most widely used and SEO-friendly option. Search engines treat hyphens as word separators. Underscores are acceptable but less recommended." },
+          { question: "Why should slugs be lowercase?", answer: "URLs are case-sensitive by standard. Using lowercase prevents duplicate content issues where 'My-Post' and 'my-post' could be treated as different pages." },
+        ]}
       />
-
-      <div className="flex items-center gap-4 mb-4">
-        <label className="flex items-center gap-2 text-sm text-zinc-400">
-          <span>Separator:</span>
-          <select
-            value={separator}
-            onChange={(e) => setSeparator(e.target.value)}
-            className="bg-zinc-900 border border-zinc-700 rounded px-2 py-1 text-zinc-300 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
-          >
-            <option value="-">Hyphen (-)</option>
-            <option value="_">Underscore (_)</option>
-            <option value="">None</option>
-          </select>
-        </label>
-
-        <label className="flex items-center gap-2 text-sm text-zinc-400">
-          <input
-            type="checkbox"
-            checked={lowercase}
-            onChange={(e) => setLowercase(e.target.checked)}
-            className="accent-emerald-500"
-          />
-          Lowercase
-        </label>
-      </div>
-
-      <div className="bg-zinc-900 border border-zinc-800 rounded-lg p-4">
-        <div className="flex items-center justify-between mb-2">
-          <span className="text-xs text-zinc-400">Slug Output</span>
-          {slug && (
-            <button
-              onClick={copySlug}
-              className="text-xs text-emerald-400 hover:text-emerald-300 transition-colors"
-            >
-              Copy
-            </button>
-          )}
-        </div>
-        <div className="text-zinc-100 break-all">
-          {slug || <span className="text-zinc-600">Slug will appear here...</span>}
-        </div>
-      </div>
-
-      <div className="mt-6 text-sm text-zinc-500">
-        <p>Useful for URLs, file names, and SEO-friendly permalinks.</p>
-      </div>
-
-      <AdBanner />
-      <InContentAd />
-
-      <AdBanner />
-
-      <TipJar />
-    </div>
+    </>
   );
 }

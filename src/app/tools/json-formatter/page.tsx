@@ -1,111 +1,51 @@
-"use client";
+import type { Metadata } from "next";
+import JsonFormatterTool from "./ToolClient";
+import SEOContent from "@/components/SEOContent";
 
-import AdBanner from "@/components/AdBanner";
-import InContentAd from "@/components/InContentAd";
+export const metadata: Metadata = {
+  title: "Free Online JSON Formatter & Validator | Zelve Tool AI",
+  description: "Format, validate, and minify JSON data online. Paste your JSON to get instant formatting with syntax validation. Free, fast, and private.",
+  keywords: ["JSON formatter", "JSON validator", "JSON beautifier", "JSON minifier", "format JSON online", "JSON lint", "Zelve JSON formatter"],
+  openGraph: {
+    title: "Free Online JSON Formatter & Validator",
+    description: "Format, validate, and minify JSON data online. Instant formatting with syntax validation.",
+    type: "website",
+    siteName: "Zelve Tool AI",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Free Online JSON Formatter & Validator",
+    description: "Format, validate, and minify JSON data online. Instant formatting with syntax validation.",
+  },
+};
 
-import { useState } from "react";
-
-export default function JsonFormatter() {
-  const [input, setInput] = useState("");
-  const [output, setOutput] = useState("");
-  const [error, setError] = useState("");
-  const [copied, setCopied] = useState(false);
-
-  const format = (indent: number) => {
-    setError("");
-    setOutput("");
-    try {
-      const parsed = JSON.parse(input);
-      setOutput(JSON.stringify(parsed, null, indent));
-    } catch (e: unknown) {
-      setError(e instanceof Error ? e.message : "Invalid JSON");
-    }
-  };
-
-  const minify = () => {
-    setError("");
-    setOutput("");
-    try {
-      const parsed = JSON.parse(input);
-      setOutput(JSON.stringify(parsed));
-    } catch (e: unknown) {
-      setError(e instanceof Error ? e.message : "Invalid JSON");
-    }
-  };
-
-  const validate = () => {
-    setError("");
-    setOutput("");
-    try {
-      JSON.parse(input);
-      setError("Valid JSON");
-    } catch (e: unknown) {
-      setError(e instanceof Error ? e.message : "Invalid JSON");
-    }
-  };
-
-  const copy = () => {
-    navigator.clipboard.writeText(output || input);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
-  };
-
-  const lines = input.split("\n").length;
-
+export default function JsonFormatterPage() {
   return (
-    <div className="max-w-4xl mx-auto px-4 py-12">
-      <h1 className="text-3xl font-bold text-white mb-2">JSON Formatter</h1>
-      <p className="text-zinc-400 mb-8">Format, validate, and minify JSON data instantly. Everything runs locally in your browser.</p>
-
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-4">
-        <div>
-          <div className="flex items-center justify-between mb-2">
-            <span className="text-sm text-zinc-400">Input{lines > 1 ? ` (${lines} lines)` : ""}</span>
-            <button onClick={() => { setInput(""); setOutput(""); setError(""); }} className="text-xs text-zinc-600 hover:text-zinc-400 transition-colors">Clear</button>
-          </div>
-          <textarea
-            value={input}
-            onChange={(e) => { setInput(e.target.value); setError(""); }}
-            placeholder='{"key": "value", "numbers": [1, 2, 3]}'
-            className="w-full h-96 bg-zinc-900 border border-zinc-800 rounded-xl p-4 font-mono text-sm text-zinc-300 placeholder-zinc-700 resize-none focus:outline-none focus:border-emerald-500/50"
-            spellCheck={false}
-          />
-        </div>
-        <div>
-          <div className="flex items-center justify-between mb-2">
-            <span className="text-sm text-zinc-400">Output</span>
-            {(output || error) && (
-              <button onClick={copy} className="text-xs text-zinc-600 hover:text-zinc-400 transition-colors">
-                {copied ? "Copied!" : "Copy"}
-              </button>
-            )}
-          </div>
-          <div className="w-full h-96 bg-zinc-900 border border-zinc-800 rounded-xl p-4 overflow-auto">
-            {error ? (
-              <p className={`text-sm font-mono ${error === "Valid JSON" ? "text-emerald-400" : "text-red-400"}`}>{error}</p>
-            ) : output ? (
-              <pre className="text-sm font-mono text-zinc-300 whitespace-pre-wrap">{output}</pre>
-            ) : (
-              <p className="text-sm text-zinc-700">Formatted output will appear here</p>
-            )}
-          </div>
-        </div>
-      </div>
-
-      <div className="flex flex-wrap gap-3">
-        <button onClick={() => format(2)} className="px-4 py-2 bg-emerald-500 hover:bg-emerald-400 text-black font-semibold rounded-lg transition-colors text-sm">
-          Format (2 spaces)
-        </button>
-        <button onClick={() => format(4)} className="px-4 py-2 bg-emerald-500 hover:bg-emerald-400 text-black font-semibold rounded-lg transition-colors text-sm">
-          Format (4 spaces)
-        </button>
-        <button onClick={minify} className="px-4 py-2 bg-zinc-800 hover:bg-zinc-700 text-zinc-300 font-semibold rounded-lg transition-colors text-sm">
-          Minify
-        </button>
-        <button onClick={validate} className="px-4 py-2 bg-zinc-800 hover:bg-zinc-700 text-zinc-300 font-semibold rounded-lg transition-colors text-sm">
-          Validate
-        </button>
-      </div>
-    </div>
+    <>
+      <JsonFormatterTool />
+      <SEOContent
+        title="About the JSON Formatter"
+        description="The JSON Formatter is a free online tool that formats, validates, and minifies JSON data. Paste your JSON string and instantly get a properly indented and formatted version. The tool also validates JSON syntax and highlights errors, making it essential for developers working with APIs and configuration files."
+        features={[
+          "Instant JSON formatting with proper indentation",
+          "JSON validation with clear error messages",
+          "Minify JSON to compact single-line format",
+          "Side-by-side input and output view",
+          "Copy formatted JSON to clipboard",
+          "Handles large JSON files efficiently",
+        ]}
+        howToUse={[
+          "Paste your JSON data into the input area on the left.",
+          "The formatted JSON appears instantly on the right.",
+          "If there are syntax errors, they are highlighted with line numbers.",
+          "Click Copy to get the formatted JSON on your clipboard.",
+        ]}
+        faq={[
+          { question: "What is JSON?", answer: "JSON (JavaScript Object Notation) is a lightweight data format used widely in APIs, configuration files, and data exchange. It uses key-value pairs and arrays in a human-readable text format." },
+          { question: "Why should I format JSON?", answer: "Formatted JSON is easier to read, debug, and maintain. Minified JSON saves space for production. Both formats are valid — formatting is about readability." },
+          { question: "Is there a file size limit?", answer: "The tool handles most JSON files efficiently in the browser. Extremely large files (10MB+) may cause slower formatting depending on your device's performance." },
+        ]}
+      />
+    </>
   );
 }

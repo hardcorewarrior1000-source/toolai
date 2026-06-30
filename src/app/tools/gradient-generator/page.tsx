@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import GradientGeneratorTool from "./ToolClient";
+import SEOContent from "@/components/SEOContent";
 
 export const metadata: Metadata = {
   title: "CSS Gradient Generator — Free Online Tool | Zelve Tool AI",
@@ -84,6 +85,29 @@ export default function GradientGeneratorPage() {
         }}
       />
       <GradientGeneratorTool />
+      <SEOContent
+        title="About the CSS Gradient Generator"
+        description="Create beautiful CSS gradients with the Gradient Generator. Choose up to 5 color stops, adjust the angle, and get a live preview of your gradient. Copy the CSS code directly into your project. Supports linear gradients with full customization of colors, positions, and direction."
+        features={[
+          "Live gradient preview as you edit",
+          "Up to 5 customizable color stops",
+          "Angle slider from 0 to 360 degrees",
+          "One-click CSS code copy",
+          "Add or remove color stops dynamically",
+          "Real-time output with proper CSS syntax",
+        ]}
+        howToUse={[
+          "Select colors for each gradient stop using the color pickers.",
+          "Adjust the position of each stop using the percentage sliders.",
+          "Use the angle slider to change the gradient direction.",
+          "Copy the generated CSS code with one click.",
+        ]}
+        faq={[
+          { question: "What is a CSS gradient?", answer: "A CSS gradient is a smooth transition between two or more colors, rendered as a background in web design. The Gradient Generator creates the CSS code needed to display these gradients." },
+          { question: "Can I create radial gradients?", answer: "Currently, the tool generates linear gradients. Radial gradient support may be added in a future update." },
+          { question: "How many color stops can I use?", answer: "You can use up to 5 color stops. Most gradients look great with 2-3 stops, but additional stops give you more control over complex color transitions." },
+        ]}
+      />
     </>
   );
 }

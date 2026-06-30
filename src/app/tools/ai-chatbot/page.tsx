@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import AIChatTool from "./ToolClient";
+import SEOContent from "@/components/SEOContent";
 
 export const metadata: Metadata = {
   title: "Zelve AI Chat — Free AI Chatbot with Groq & OpenRouter | Zelve Tool AI",
@@ -84,6 +85,29 @@ export default function ZelveAIChatPage() {
         }}
       />
       <AIChatTool />
+      <SEOContent
+        title="About Zelve AI Chat"
+        description="Zelve AI Chat is a free AI chatbot playground that lets you chat with multiple large language models directly in your browser. Powered by Groq for ultra-fast inference and OpenRouter for access to a wider model selection, it supports Llama, Nemotron, Gemma, and GPT-OSS models. No API key required for the free tier."
+        features={[
+          "6 AI models available: Llama 3.1 8B, Llama 3.3 70B, Nemotron, Gemma 4, GPT-OSS 20B, GPT-OSS 120B",
+          "Real-time streaming responses displayed token by token",
+          "Supports Groq (ultra-fast) and OpenRouter (broader model access)",
+          "Markdown rendering for formatted AI responses",
+          "100% private — your API key never leaves your browser",
+          "No signup required for the free tier",
+        ]}
+        howToUse={[
+          "Select your preferred AI provider (Groq for speed, OpenRouter for model variety).",
+          "Choose a model from the dropdown — free tier uses Llama 3.1 8B via Groq.",
+          "Type your message and press Enter or click Send.",
+          "Watch the response stream in real-time. Use Copy or Clear buttons as needed.",
+        ]}
+        faq={[
+          { question: "Do I need an API key?", answer: "The free tier works without any API key — you get 10 messages per day powered by Llama 3.1 8B via Groq. For more messages and model access, upgrade to Starter or bring your own API key." },
+          { question: "Which model should I use?", answer: "For speed, use Llama 3.1 8B via Groq. For more capable responses, use Llama 3.3 70B or Nemotron 120B via OpenRouter. GPT-OSS models are good for code and technical tasks." },
+          { question: "Is my conversation private?", answer: "Yes. Messages are sent directly from your browser to the AI provider's API. Zelve Tool AI never sees, stores, or logs your conversations." },
+        ]}
+      />
     </>
   );
 }
