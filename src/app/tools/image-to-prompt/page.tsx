@@ -85,29 +85,7 @@ export default function ImageToPromptPage() {
         }}
       />
       <ImageToPromptTool />
-      <SEOContent
-        title="About the Image to Prompt Generator"
-        description="The Image to Prompt Generator analyzes any image and generates a detailed text prompt describing its visual elements. Using client-side canvas analysis, it detects dominant colors, brightness, warmth, hue, and saturation to produce structured prompts suitable for Midjourney, DALL-E, and other AI image generators."
-        features={[
-          "Client-side image analysis using Canvas API",
-          "Detects dominant colors, brightness, warmth, and saturation",
-          "12 art style options from Photorealistic to Watercolor",
-          "10 mood presets from Moody & Dark to Bright & Cheerful",
-          "Generates prompts compatible with Midjourney and DALL-E",
-          "Copy button for one-click prompt copying",
-        ]}
-        howToUse={[
-          "Upload an image by clicking the upload area or dragging a file.",
-          "Select an art style and mood from the dropdown menus.",
-          "View the analysis results including color swatches and image metrics.",
-          "Copy the generated prompt and use it with your favorite AI image generator.",
-        ]}
-        faq={[
-          { question: "What AI image generators work with these prompts?", answer: "The generated prompts are compatible with Midjourney, DALL-E, Stable Diffusion, and other AI image generation tools that accept text prompts." },
-          { question: "How accurate is the image analysis?", answer: "The tool uses canvas-based pixel analysis to detect colors, brightness, and other visual properties. While not as sophisticated as a real AI vision model, it provides useful starting points for prompt generation." },
-          { question: "Does the tool use AI to generate prompts?", answer: "The analysis is done using client-side image processing (Canvas API). Prompt generation uses template-based logic combining the detected visual features with your chosen style and mood." },
-        ]}
-      />
+      <SEOContent toolId="image-to-prompt" />
     </>
   );
 }

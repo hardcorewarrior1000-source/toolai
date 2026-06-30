@@ -85,29 +85,7 @@ export default function QRGeneratorPage() {
         }}
       />
       <QRGeneratorTool />
-      <SEOContent
-        title="About the QR Code Generator"
-        description="Generate scannable QR codes from any text, URL, or data with this free online QR Code Generator. Choose from 4 error correction levels and 4 size options, then download your QR code as a PNG file instantly. Built with the qrcode library for reliable, standards-compliant QR code generation."
-        features={[
-          "Generate QR codes from any text, URL, or data",
-          "4 error correction levels: Low (7%), Medium (15%), Quartile (25%), High (30%)",
-          "4 size options from 200px to 500px",
-          "Download as PNG with one click",
-          "Real-time QR preview as you type",
-          "Works entirely in your browser — no data sent to servers",
-        ]}
-        howToUse={[
-          "Enter the text or URL you want to encode in the input field.",
-          "Select an error correction level — higher levels allow the QR code to be partially obscured.",
-          "Choose a size that matches your use case.",
-          "Click Download to save the QR code as a PNG file.",
-        ]}
-        faq={[
-          { question: "What error correction level should I use?", answer: "Use Medium (M) for general purposes. Choose High (H) if you need to overlay a logo on the QR code, as it allows up to 30% damage while remaining scannable." },
-          { question: "Can I scan a QR code with my phone?", answer: "Yes, most modern smartphones can scan QR codes directly through the camera app. No special app is needed on iOS 11+ or Android 9+." },
-          { question: "Is there a limit to how much data I can encode?", answer: "QR codes can store up to 4,296 alphanumeric characters. For URLs, this is more than enough. Very long text may require a higher error correction level and larger size." },
-        ]}
-      />
+      <SEOContent toolId="qr-generator" />
     </>
   );
 }

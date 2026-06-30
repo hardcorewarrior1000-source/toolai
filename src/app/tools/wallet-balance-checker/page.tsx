@@ -38,29 +38,7 @@ export default function WalletBalanceCheckerPage() {
         }}
       />
       <WalletBalanceTool />
-      <SEOContent
-        title="About the Wallet Balance Checker"
-        description="The Wallet Balance Checker lets you look up the balance of any Ethereum, Solana, or Bitcoin wallet address. Paste a public address and instantly see the native token balance, estimated USD value, and a direct link to the block explorer. Great for verifying payments or checking your own holdings."
-        features={[
-          "Check balances for Ethereum, Solana, and Bitcoin wallets",
-          "See native token balance and estimated USD value",
-          "Direct link to Etherscan, Solscan, or Blockchain.com explorer",
-          "Uses public RPC nodes and APIs — no API keys required",
-          "Works with any valid public wallet address",
-          "All lookups are read-only and completely private",
-        ]}
-        howToUse={[
-          "Paste a wallet address into the input field.",
-          "Select the blockchain network (Ethereum, Solana, or Bitcoin).",
-          "Click Check Balance to fetch the current balance.",
-          "View the token balance, USD value, and click the explorer link for full details.",
-        ]}
-        faq={[
-          { question: "Can I check any wallet's balance?", answer: "Yes, you can check the balance of any public wallet address. Blockchain data is publicly transparent. However, the wallet owner's identity is not revealed." },
-          { question: "How accurate is the USD value?", answer: "USD values are based on current market prices from public APIs. Prices update with each lookup but may have slight delays compared to real-time exchange prices." },
-          { question: "Does this tool connect to my wallet?", answer: "No. This tool only reads public blockchain data. It never connects to or interacts with your wallet. You only need to paste a public address." },
-        ]}
-      />
+      <SEOContent toolId="wallet-balance-checker" />
     </>
   );
 }

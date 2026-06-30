@@ -85,29 +85,7 @@ export default function AIHumanizerPage() {
         }}
       />
       <HumanizerTool />
-      <SEOContent
-        title="About the AI Humanizer"
-        description="The AI Humanizer is a free online tool that transforms AI-generated text into natural, human-like writing. Whether you use ChatGPT, Gemini, Claude, or any other AI writing assistant, this tool helps make the output sound more authentic and personal. It applies over 60 different transformations including adding contractions, casual expressions, discourse markers, and sentence restructuring."
-        features={[
-          "60+ text transformations for natural-sounding output",
-          "4 strength levels: Light, Medium, Aggressive, and Extreme (Pro)",
-          "Real-time side-by-side diff view showing every change",
-          "Editable output so you can fine-tune the result",
-          "Word, character, and sentence count comparison",
-          "Works with text from ChatGPT, Gemini, Claude, and any AI source",
-        ]}
-        howToUse={[
-          "Paste your AI-generated text into the input area on the left.",
-          "Choose a strength level — Light for subtle tweaks, Aggressive for major rewrites.",
-          "The humanized text appears instantly on the right with a highlighted diff view.",
-          "Copy the result or edit it directly in the output area.",
-        ]}
-        faq={[
-          { question: "Will this bypass AI detection tools?", answer: "The tool applies human-like transformations to make AI text sound more natural and readable. Results vary depending on the original text and strength level chosen." },
-          { question: "What is the difference between strength levels?", answer: "Light applies contractions and minor tweaks. Medium adds discourse markers and casual tone. Aggressive performs major rewrites with filler words. Extreme (Pro only) fully restructures sentences and simplifies complex phrasing." },
-          { question: "Is my text stored or sent to a server?", answer: "No. All processing happens entirely in your browser. Your text is never sent to any server, making it completely private." },
-        ]}
-      />
+      <SEOContent toolId="ai-humanizer" />
     </>
   );
 }

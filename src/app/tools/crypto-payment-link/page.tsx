@@ -38,29 +38,7 @@ export default function CryptoPaymentLinkPage() {
         }}
       />
       <PaymentLinkTool />
-      <SEOContent
-        title="About the Crypto Payment Link Generator"
-        description="The Crypto Payment Link Generator creates standard payment URIs for Bitcoin, Ethereum, and Solana. These links follow official protocols (BIP21 for BTC, EIP-681 for ETH, Solana URIs) and can be shared with customers or friends to request crypto payments with a specific amount pre-filled."
-        features={[
-          "Generate BIP21-compliant Bitcoin payment URIs",
-          "Generate EIP-681-compliant Ethereum payment URIs",
-          "Generate Solana payment URIs",
-          "Optional amount parameter for pre-filled payment requests",
-          "One-click copy for sharing",
-          "Works with any compatible crypto wallet app",
-        ]}
-        howToUse={[
-          "Select the cryptocurrency (Bitcoin, Ethereum, or Solana).",
-          "Enter the recipient wallet address.",
-          "Optionally enter an amount in the chosen cryptocurrency.",
-          "Copy the generated payment URI and share it with the payer.",
-        ]}
-        faq={[
-          { question: "What is a payment URI?", answer: "A payment URI is a standardized link format that crypto wallets understand. When clicked, it opens the user's wallet app with the address and amount pre-filled, making payments quick and error-free." },
-          { question: "Which wallets support payment URIs?", answer: "Most major wallets support them: MetaMask (ETH), Phantom (SOL), Trust Wallet, Ledger Live, and many more. Bitcoin wallets like BlueWallet and Sparrow support BIP21 URIs." },
-          { question: "What is the difference between BIP21 and EIP-681?", answer: "BIP21 is the Bitcoin standard for payment URIs (bitcoin:address?amount=X). EIP-681 is the Ethereum equivalent (ethereum:address?value=X&chainId=1). Both serve the same purpose for their respective chains." },
-        ]}
-      />
+      <SEOContent toolId="crypto-payment-link" />
     </>
   );
 }

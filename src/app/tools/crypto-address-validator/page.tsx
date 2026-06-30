@@ -38,29 +38,7 @@ export default function CryptoAddressValidatorPage() {
         }}
       />
       <AddressValidatorTool />
-      <SEOContent
-        title="About the Crypto Address Validator"
-        description="The Crypto Address Validator checks whether a cryptocurrency wallet address is correctly formatted and passes checksum verification. It supports Bitcoin (P2PKH, P2SH, Bech32, Bech32m), Ethereum (EIP-55 mixed-case checksum), and Solana (Base58). Before sending crypto, always validate the recipient address to avoid losing funds."
-        features={[
-          "Validates Bitcoin addresses: P2PKH, P2SH, Bech32 (SegWit), and Bech32m (Taproot)",
-          "Ethereum address validation with EIP-55 mixed-case checksum",
-          "Solana address validation (Base58, 32-44 characters)",
-          "Instant real-time validation as you paste",
-          "Clear error messages explaining what's wrong",
-          "All validation happens client-side — addresses are never sent anywhere",
-        ]}
-        howToUse={[
-          "Paste a crypto wallet address into the input field.",
-          "The tool automatically detects the address type (Bitcoin, Ethereum, or Solana).",
-          "See instant validation results — checkmark for valid, error message for invalid.",
-          "If invalid, the tool explains what's wrong (wrong length, bad checksum, etc.).",
-        ]}
-        faq={[
-          { question: "What happens if I send crypto to a wrong address?", answer: "Crypto transactions are irreversible. If you send to an invalid or wrong address, the funds are permanently lost. Always validate addresses before sending." },
-          { question: "Can this tool check if an address has funds?", answer: "No, this tool only validates the address format and checksum. To check balances, use the Wallet Balance Checker tool." },
-          { question: "Which Bitcoin address types are supported?", answer: "The tool supports all four Bitcoin address types: P2PKH (legacy, starts with 1), P2SH (nested SegWit, starts with 3), Bech32 (native SegWit, starts with bc1q), and Bech32m (Taproot, starts with bc1p)." },
-        ]}
-      />
+      <SEOContent toolId="crypto-address-validator" />
     </>
   );
 }
