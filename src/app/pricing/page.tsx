@@ -247,6 +247,22 @@ export default function PricingPage() {
             </thead>
             <tbody>
               <tr className="border-b border-zinc-800/50">
+                <td className="py-3 px-4 text-zinc-300 font-medium">Zelve AI Chat Models</td>
+                <td className="text-center py-3 px-4 text-zinc-400 text-xs">Nemotron 3 Super</td>
+                <td className="text-center py-3 px-4 text-zinc-400 text-xs">Nemotron 3 Super</td>
+                <td className="text-center py-3 px-4 text-emerald-400 text-xs">Nemotron, Gemma 4, GPT-OSS 20B</td>
+                <td className="text-center py-3 px-4 text-emerald-400 text-xs">All 4 models</td>
+                <td className="text-center py-3 px-4 text-emerald-400 text-xs">All 4 models</td>
+              </tr>
+              <tr className="border-b border-zinc-800/50">
+                <td className="py-3 px-4 text-zinc-300 font-medium">AI Chat Messages</td>
+                <td className="text-center py-3 px-4 text-zinc-500">100/day</td>
+                <td className="text-center py-3 px-4 text-zinc-500">100,000/day</td>
+                <td className="text-center py-3 px-4 text-emerald-400">Unlimited</td>
+                <td className="text-center py-3 px-4 text-emerald-400">Unlimited</td>
+                <td className="text-center py-3 px-4 text-emerald-400">Unlimited</td>
+              </tr>
+              <tr className="border-b border-zinc-800/50">
                 <td className="py-3 px-4 text-zinc-300">AI Tools (Humanizer, QR, Image to Prompt, etc.)</td>
                 <td className="text-center py-3 px-4 text-zinc-500">2,500/day</td>
                 <td className="text-center py-3 px-4 text-zinc-500">100,000/day</td>
