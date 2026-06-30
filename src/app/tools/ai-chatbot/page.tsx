@@ -94,8 +94,8 @@ export default function AIChatbotPage() {
 
   const getKeyPreview = () => {
     if (!apiKey) return "";
-    if (apiKey.length <= 8) return "••••••••";
-    return apiKey.slice(0, 4) + "••••" + apiKey.slice(-4);
+    if (apiKey.length <= 8) return "\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022";
+    return apiKey.slice(0, 4) + "\u2022\u2022\u2022\u2022" + apiKey.slice(-4);
   };
 
   async function streamOpenAI(messages: Message[], model: string, key: string, baseUrl?: string): Promise<string> {
@@ -149,7 +149,9 @@ export default function AIChatbotPage() {
               return updated;
             });
           }
-        } catch {}
+        } catch {
+          // skip malformed SSE lines
+        }
       }
     }
     return full;
@@ -162,10 +164,13 @@ export default function AIChatbotPage() {
     }));
 
     const res = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/${model}:streamGenerateContent?alt=sse&key=${key}`,
+      `https://generativelanguage.googleapis.com/v1beta/models/${model}:streamGenerateContent?alt=sse`,
       {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          "x-goog-api-key": key,
+        },
         body: JSON.stringify({ contents }),
       }
     );
@@ -204,7 +209,9 @@ export default function AIChatbotPage() {
               return updated;
             });
           }
-        } catch {}
+        } catch {
+          // skip malformed SSE lines
+        }
       }
     }
     return full;
@@ -350,7 +357,7 @@ export default function AIChatbotPage() {
         <div className="h-[500px] overflow-y-auto p-4 space-y-4" id="chat-scroll">
           {messages.length === 0 && (
             <div className="flex flex-col items-center justify-center h-full text-zinc-600">
-              <span className="text-4xl mb-3">💬</span>
+              <span className="text-4xl mb-3">{"\uD83D\uDCAC"}</span>
               <p className="text-sm">Start a conversation by typing a message below</p>
               <p className="text-xs mt-1">Make sure your API key is valid and has sufficient credits</p>
             </div>
@@ -366,10 +373,10 @@ export default function AIChatbotPage() {
                 {msg.role === "assistant" && i > 0 && (
                   <div className="flex items-center gap-2 mb-2 text-[10px] text-zinc-500">
                     <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
-                    {config.name} · {config.models.find((m) => m.id === model)?.name || model}
+                    {config.name} \u00B7 {config.models.find((m) => m.id === model)?.name || model}
                   </div>
                 )}
-                <div className="whitespace-pre-wrap">{msg.content || (loading && i === messages.length - 1 ? <span className="animate-pulse">●</span> : "")}</div>
+                <div className="whitespace-pre-wrap">{msg.content || (loading && i === messages.length - 1 ? <span className="animate-pulse">{"\u25CF"}</span> : "")}</div>
                 {msg.role === "assistant" && msg.content && (
                   <button
                     onClick={() => copyMessage(msg.content)}
@@ -407,7 +414,7 @@ export default function AIChatbotPage() {
               disabled={!input.trim() || !apiKey.trim() || loading}
               className="px-5 py-2.5 bg-emerald-600 hover:bg-emerald-500 disabled:bg-zinc-700 disabled:text-zinc-500 text-white rounded-lg font-medium text-sm transition-colors"
             >
-              {loading ? "●●●" : "Send"}
+              {loading ? "\u25CF\u25CF\u25CF" : "Send"}
             </button>
             {messages.length > 0 && (
               <button
@@ -447,7 +454,7 @@ export default function AIChatbotPage() {
           </div>
         </div>
         <div className="mt-4 p-3 bg-zinc-950 border border-zinc-800 rounded-lg text-xs text-zinc-500">
-          <p className="font-medium text-zinc-400 mb-1">🔒 Privacy Notice</p>
+          <p className="font-medium text-zinc-400 mb-1">{"\uD83D\uDD12"} Privacy Notice</p>
           <p>Your API key is stored only in your browser&apos;s memory and is sent directly to the AI provider. ToolAI never sees, stores, or transmits your key. Clearing your browser data or clicking &quot;Clear&quot; removes all chat history.</p>
         </div>
       </div>

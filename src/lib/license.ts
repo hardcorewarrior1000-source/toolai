@@ -20,7 +20,7 @@ function sha256(input: string): Promise<string> {
 }
 
 export async function generateLicenseKey(txHash: string, tier: string): Promise<string> {
-  const hash = await sha256(txHash + SALT);
+  const hash = await sha256(txHash + tier + SALT);
   const segments = [
     hash.slice(0, 4).toUpperCase(),
     hash.slice(4, 8).toUpperCase(),

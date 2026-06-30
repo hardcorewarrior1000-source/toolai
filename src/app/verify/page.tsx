@@ -1,8 +1,9 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { verifyTransaction, type Chain, WALLETS, getAmountForTier, fetchLivePrices } from "@/lib/crypto-verify";
-import { activateLicense, getLicense, clearLicense, type LicenseData } from "@/lib/license";
+import { verifyTransaction, type Chain, getAmountForTier, fetchLivePrices } from "@/lib/crypto-verify";
+import { WALLETS } from "@/lib/wallets";
+import { getLicense, clearLicense, type LicenseData } from "@/lib/license";
 import { useSubscription } from "@/components/SubscriptionProvider";
 import AdBanner from "@/components/AdBanner";
 
@@ -49,19 +50,35 @@ export default function VerifyPage() {
     setResult(res);
 
     if (res.success && res.tier && res.tier !== "free") {
-      const lic = await activateLicense(txHash.trim(), res.tier, chain);
-      setLicense(lic);
-      setTier(res.tier);
-      refresh();
-
-      // Also store in D1 if logged in
       try {
-        await fetch("/api/license/activate", {
+        const apiRes = await fetch("/api/license/activate", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ txHash: txHash.trim(), chain, tier: res.tier }),
         });
-      } catch { /* not logged in, that's fine */ }
+        const apiData = await apiRes.json();
+        if (apiData.ok) {
+          const lic: LicenseData = {
+            key: apiData.key,
+            tier: apiData.tier,
+            txHash: txHash.trim(),
+            chain,
+            activatedAt: new Date().toISOString(),
+            expiresAt: apiData.expiresAt,
+          };
+          setLicense(lic);
+          setTier(apiData.tier);
+          refresh();
+        } else {
+          setResult({ success: false, error: apiData.error || "Activation failed" });
+        }
+      } catch {
+        const { activateLicense } = await import("@/lib/license");
+        const lic = await activateLicense(txHash.trim(), res.tier, chain);
+        setLicense(lic);
+        setTier(res.tier);
+        refresh();
+      }
     }
     setVerifying(false);
   };
@@ -195,7 +212,7 @@ export default function VerifyPage() {
               </p>
               {result.amount && result.usdValue !== undefined && (
                 <p className="text-zinc-500 text-xs mb-2">
-                  Detected: {result.amount} {WALLETS[chain].label} ≈ ${result.usdValue.toFixed(2)} USD
+                  Detected: {result.amount} {WALLETS[chain].label} \u2248 ${result.usdValue.toFixed(2)} USD
                 </p>
               )}
               {license && (

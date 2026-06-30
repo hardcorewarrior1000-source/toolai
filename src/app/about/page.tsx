@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import AdBanner from "@/components/AdBanner";
+import { WALLETS } from "@/lib/wallets";
 
 export const metadata: Metadata = {
   title: "About",
@@ -32,19 +33,19 @@ export default function AboutPage() {
           <div>
             <span className="text-zinc-500">Solana:</span>
             <div className="font-mono text-emerald-400 mt-1 break-all text-xs">
-              BeS2p6srqB11aTAKCFazCTsCwhpeCZwQtfbBqegp3LsT
+              {WALLETS.solana.address}
             </div>
           </div>
           <div>
             <span className="text-zinc-500">Ethereum / BSC / Polygon:</span>
             <div className="font-mono text-emerald-400 mt-1 break-all text-xs">
-              0xAD99329d02c2cD485Dc86EF0E6FbaDCB0702b551
+              {WALLETS.ethereum.address}
             </div>
           </div>
           <div>
             <span className="text-zinc-500">Bitcoin:</span>
             <div className="font-mono text-emerald-400 mt-1 break-all text-xs">
-              bc1q3h9a3q4axug2csc68858mnjtpqpv0zl9f930jr
+              {WALLETS.bitcoin.address}
             </div>
           </div>
         </div>

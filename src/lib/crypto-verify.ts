@@ -1,29 +1,7 @@
-export type Chain = "solana" | "ethereum" | "bitcoin";
+import { WALLETS, TIER_USD, type Chain } from "./wallets";
 
-export const WALLETS: Record<Chain, { address: string; label: string; icon: string }> = {
-  solana: {
-    address: "BeS2p6srqB11aTAKCFazCTsCwhpeCZwQtfbBqegp3LsT",
-    label: "SOL",
-    icon: "◎",
-  },
-  ethereum: {
-    address: "0xAD99329d02c2cD485Dc86EF0E6FbaDCB0702b551",
-    label: "ETH",
-    icon: "Ξ",
-  },
-  bitcoin: {
-    address: "bc1q3h9a3q4axug2csc68858mnjtpqpv0zl9f930jr",
-    label: "BTC",
-    icon: "₿",
-  },
-};
-
-const TIER_USD: Record<string, number> = {
-  starter: 5,
-  pro: 15,
-  business: 45,
-  enterprise: 99,
-};
+export type { Chain };
+export { WALLETS, TIER_USD };
 
 interface LivePrices {
   solana: number;
@@ -65,7 +43,10 @@ export async function getAmountForTier(tierId: string, chain: Chain): Promise<st
   return amount < 0.0001 ? amount.toExponential(4) : amount.toFixed(6);
 }
 
-export async function getAmountForTierFormatted(tierId: string, chain: Chain): Promise<{ crypto: string; usd: number; unit: string }> {
+export async function getAmountForTierFormatted(
+  tierId: string,
+  chain: Chain
+): Promise<{ crypto: string; usd: number; unit: string }> {
   const prices = await fetchLivePrices();
   const usd = TIER_USD[tierId] || 0;
   const pricePerUnit = prices[chain];
@@ -115,13 +96,32 @@ export async function verifySolana(txHash: string): Promise<VerifyResult> {
     const data = await res.json();
     if (!data.result) return { success: false, error: "Transaction not found" };
     if (data.result.meta?.err) return { success: false, error: "Transaction failed" };
-    const lamports = data.result.meta?.preBalances?.[0] !== undefined
-      ? Math.abs((data.result.meta.postBalances?.[0] || 0) - (data.result.meta.preBalances?.[0] || 0))
-      : 0;
+
+    const msg = data.result.transaction?.message;
+    const accounts = msg?.accountKeys || [];
+    const toIdx = accounts.findIndex(
+      (a: { pubkey?: string; toString?: () => string } | string) =>
+        typeof a === "string" ? a === WALLETS.solana.address : a?.pubkey === WALLETS.solana.address
+    );
+    if (toIdx === -1) return { success: false, error: "Payment was not sent to our wallet" };
+
+    const lamports =
+      data.result.meta?.preBalances?.[0] !== undefined
+        ? Math.abs(
+            (data.result.meta.postBalances?.[0] || 0) -
+              (data.result.meta.preBalances?.[0] || 0)
+          )
+        : 0;
     const sol = lamports / 1_000_000_000;
     const prices = await fetchLivePrices();
     const usdValue = sol * prices.solana;
-    return { success: true, tier: await detectTierFromTx(sol, "solana"), amount: sol, usdValue, confirmations: 1 };
+    return {
+      success: true,
+      tier: await detectTierFromTx(sol, "solana"),
+      amount: sol,
+      usdValue,
+      confirmations: 1,
+    };
   } catch {
     return { success: false, error: "Failed to verify Solana transaction" };
   }
@@ -141,11 +141,23 @@ export async function verifyEthereum(txHash: string): Promise<VerifyResult> {
     });
     const data = await res.json();
     if (!data.result) return { success: false, error: "Transaction not found" };
-    if (data.result.blockNumber === null) return { success: false, error: "Transaction pending" };
+    if (data.result.blockNumber === null)
+      return { success: false, error: "Transaction pending" };
+
+    const toAddr = data.result.to?.toLowerCase();
+    if (toAddr !== WALLETS.ethereum.address.toLowerCase())
+      return { success: false, error: "Payment was not sent to our wallet" };
+
     const value = parseInt(data.result.value, 16) / 1e18;
     const prices = await fetchLivePrices();
     const usdValue = value * prices.ethereum;
-    return { success: true, tier: await detectTierFromTx(value, "ethereum"), amount: value, usdValue, confirmations: 1 };
+    return {
+      success: true,
+      tier: await detectTierFromTx(value, "ethereum"),
+      amount: value,
+      usdValue,
+      confirmations: 1,
+    };
   } catch {
     return { success: false, error: "Failed to verify Ethereum transaction" };
   }
@@ -156,21 +168,47 @@ export async function verifyBitcoin(txHash: string): Promise<VerifyResult> {
     const res = await fetch(`https://blockstream.info/api/tx/${txHash}`);
     if (!res.ok) return { success: false, error: "Transaction not found" };
     const data = await res.json();
-    if (data.status?.confirmed === false) return { success: false, error: "Transaction pending" };
-    const value = data.vout?.reduce((sum: number, out: { value: number }) => sum + out.value, 0) / 1e8;
+    if (data.status?.confirmed === false)
+      return { success: false, error: "Transaction pending" };
+
+    const sentToOurWallet = data.vout?.some(
+      (out: { scriptpubkey_address?: string }) =>
+        out.scriptpubkey_address === WALLETS.bitcoin.address
+    );
+    if (!sentToOurWallet)
+      return { success: false, error: "Payment was not sent to our wallet" };
+
+    const value =
+      data.vout?.reduce(
+        (sum: number, out: { value: number }) => sum + out.value,
+        0
+      ) / 1e8;
     const prices = await fetchLivePrices();
     const usdValue = (value || 0) * prices.bitcoin;
-    return { success: true, tier: await detectTierFromTx(value || 0, "bitcoin"), amount: value, usdValue, confirmations: 1 };
+    return {
+      success: true,
+      tier: await detectTierFromTx(value || 0, "bitcoin"),
+      amount: value,
+      usdValue,
+      confirmations: 1,
+    };
   } catch {
     return { success: false, error: "Failed to verify Bitcoin transaction" };
   }
 }
 
-export async function verifyTransaction(txHash: string, chain: Chain): Promise<VerifyResult> {
+export async function verifyTransaction(
+  txHash: string,
+  chain: Chain
+): Promise<VerifyResult> {
   switch (chain) {
-    case "solana": return verifySolana(txHash);
-    case "ethereum": return verifyEthereum(txHash);
-    case "bitcoin": return verifyBitcoin(txHash);
-    default: return { success: false, error: "Unsupported chain" };
+    case "solana":
+      return verifySolana(txHash);
+    case "ethereum":
+      return verifyEthereum(txHash);
+    case "bitcoin":
+      return verifyBitcoin(txHash);
+    default:
+      return { success: false, error: "Unsupported chain" };
   }
 }

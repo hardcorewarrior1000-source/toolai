@@ -1,45 +1,15 @@
-const CORS = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Methods": "GET,POST,OPTIONS",
-  "Access-Control-Allow-Headers": "Content-Type",
-};
+import { CORS, json, hashPw, genToken, handleOptions } from "../_shared";
 
-function json(data, status = 200, extra = {}) {
-  return new Response(JSON.stringify(data), {
-    status,
-    headers: { "Content-Type": "application/json", ...CORS, ...extra },
-  });
-}
+export const onRequestOptions = handleOptions;
 
-async function hashPw(pw, salt) {
-  const enc = new TextEncoder();
-  if (!salt) {
-    const s = crypto.getRandomValues(new Uint8Array(16));
-    salt = Array.from(s).map(b => b.toString(16).padStart(2, "0")).join("");
-  }
-  const key = await crypto.subtle.importKey("raw", enc.encode(pw), "PBKDF2", false, ["deriveBits"]);
-  const bits = await crypto.subtle.deriveBits({ name: "PBKDF2", salt: enc.encode(salt), iterations: 100000, hash: "SHA-256" }, key, 256);
-  return salt + ":" + Array.from(new Uint8Array(bits)).map(b => b.toString(16).padStart(2, "0")).join("");
-}
-
-async function verifyPw(pw, stored) {
-  return (await hashPw(pw, stored.split(":")[0])) === stored;
-}
-
-function genToken() {
-  return Array.from(crypto.getRandomValues(new Uint8Array(32))).map(b => b.toString(16).padStart(2, "0")).join("");
-}
-
-export const onRequestOptions = () => new Response(null, { status: 204, headers: CORS });
-
-export async function onRequestPost(ctx) {
+export async function onRequestPost(ctx: { request: Request; env: { toolai_auth?: D1Database } }) {
   const db = ctx.env?.toolai_auth;
   if (!db) return json({ error: "DB not configured" }, 500);
 
   const { email, password } = await ctx.request.json();
   if (!email || !password) return json({ error: "Email and password required" }, 400);
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return json({ error: "Invalid email" }, 400);
-  if (password.length < 6) return json({ error: "Password must be 6+ characters" }, 400);
+  if (password.length < 8) return json({ error: "Password must be 8+ characters" }, 400);
 
   const existing = await db.prepare("SELECT id FROM users WHERE email = ?").bind(email.toLowerCase()).first();
   if (existing) return json({ error: "Email already registered" }, 409);

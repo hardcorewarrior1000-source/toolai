@@ -9,6 +9,19 @@ export interface Tier {
   adsEnabled: boolean;
 }
 
+const ALL_UNLIMITED: Record<string, "unlimited"> = {
+  "password-generator": "unlimited",
+  "json-formatter": "unlimited",
+  "word-counter": "unlimited",
+  "text-to-slug": "unlimited",
+  "gradient-generator": "unlimited",
+  "image-to-base64": "unlimited",
+  "crypto-address-validator": "unlimited",
+  "crypto-unit-converter": "unlimited",
+  "mnemonic-generator": "unlimited",
+  "crypto-payment-link": "unlimited",
+};
+
 export const tiers: Tier[] = [
   {
     id: "free",
@@ -24,22 +37,14 @@ export const tiers: Tier[] = [
     ],
     limits: {
       "ai-humanizer": 2500,
+      "ai-chatbot": 2500,
       "color-palette": 2500,
       "image-to-prompt": 2500,
       "qr-generator": 2500,
       "crypto-price-calculator": 2500,
       "eth-gas-estimator": 2500,
       "wallet-balance-checker": 2500,
-      "password-generator": "unlimited",
-      "json-formatter": "unlimited",
-      "word-counter": "unlimited",
-      "text-to-slug": "unlimited",
-      "gradient-generator": "unlimited",
-      "image-to-base64": "unlimited",
-      "crypto-address-validator": "unlimited",
-      "crypto-unit-converter": "unlimited",
-      "mnemonic-generator": "unlimited",
-      "crypto-payment-link": "unlimited",
+      ...ALL_UNLIMITED,
     },
     adsEnabled: true,
   },
@@ -57,22 +62,14 @@ export const tiers: Tier[] = [
     ],
     limits: {
       "ai-humanizer": 100000,
+      "ai-chatbot": 100000,
       "color-palette": 100000,
       "image-to-prompt": 100000,
       "qr-generator": 100000,
       "crypto-price-calculator": 100000,
       "eth-gas-estimator": 100000,
       "wallet-balance-checker": 100000,
-      "password-generator": "unlimited",
-      "json-formatter": "unlimited",
-      "word-counter": "unlimited",
-      "text-to-slug": "unlimited",
-      "gradient-generator": "unlimited",
-      "image-to-base64": "unlimited",
-      "crypto-address-validator": "unlimited",
-      "crypto-unit-converter": "unlimited",
-      "mnemonic-generator": "unlimited",
-      "crypto-payment-link": "unlimited",
+      ...ALL_UNLIMITED,
     },
     adsEnabled: false,
   },
@@ -90,22 +87,14 @@ export const tiers: Tier[] = [
     ],
     limits: {
       "ai-humanizer": "unlimited",
+      "ai-chatbot": "unlimited",
       "color-palette": "unlimited",
       "image-to-prompt": "unlimited",
       "qr-generator": "unlimited",
       "crypto-price-calculator": "unlimited",
       "eth-gas-estimator": "unlimited",
       "wallet-balance-checker": "unlimited",
-      "password-generator": "unlimited",
-      "json-formatter": "unlimited",
-      "word-counter": "unlimited",
-      "text-to-slug": "unlimited",
-      "gradient-generator": "unlimited",
-      "image-to-base64": "unlimited",
-      "crypto-address-validator": "unlimited",
-      "crypto-unit-converter": "unlimited",
-      "mnemonic-generator": "unlimited",
-      "crypto-payment-link": "unlimited",
+      ...ALL_UNLIMITED,
     },
     adsEnabled: false,
   },
@@ -124,22 +113,14 @@ export const tiers: Tier[] = [
     ],
     limits: {
       "ai-humanizer": "unlimited",
+      "ai-chatbot": "unlimited",
       "color-palette": "unlimited",
       "image-to-prompt": "unlimited",
       "qr-generator": "unlimited",
       "crypto-price-calculator": "unlimited",
       "eth-gas-estimator": "unlimited",
       "wallet-balance-checker": "unlimited",
-      "password-generator": "unlimited",
-      "json-formatter": "unlimited",
-      "word-counter": "unlimited",
-      "text-to-slug": "unlimited",
-      "gradient-generator": "unlimited",
-      "image-to-base64": "unlimited",
-      "crypto-address-validator": "unlimited",
-      "crypto-unit-converter": "unlimited",
-      "mnemonic-generator": "unlimited",
-      "crypto-payment-link": "unlimited",
+      ...ALL_UNLIMITED,
     },
     adsEnabled: false,
   },
@@ -159,22 +140,14 @@ export const tiers: Tier[] = [
     ],
     limits: {
       "ai-humanizer": "unlimited",
+      "ai-chatbot": "unlimited",
       "color-palette": "unlimited",
       "image-to-prompt": "unlimited",
       "qr-generator": "unlimited",
       "crypto-price-calculator": "unlimited",
       "eth-gas-estimator": "unlimited",
       "wallet-balance-checker": "unlimited",
-      "password-generator": "unlimited",
-      "json-formatter": "unlimited",
-      "word-counter": "unlimited",
-      "text-to-slug": "unlimited",
-      "gradient-generator": "unlimited",
-      "image-to-base64": "unlimited",
-      "crypto-address-validator": "unlimited",
-      "crypto-unit-converter": "unlimited",
-      "mnemonic-generator": "unlimited",
-      "crypto-payment-link": "unlimited",
+      ...ALL_UNLIMITED,
     },
     adsEnabled: false,
   },
@@ -206,7 +179,11 @@ export function getCurrentTier(): Tier {
           localStorage.setItem(TIER_KEY, "free");
           return tiers[0];
         }
-      } catch {}
+      } catch {
+        localStorage.removeItem("toolai_license");
+        localStorage.setItem(TIER_KEY, "free");
+        return tiers[0];
+      }
     }
   }
   return tier;
@@ -221,7 +198,7 @@ export function getUsage(toolId: string): number {
   const raw = localStorage.getItem(USAGE_KEY);
   if (!raw) return 0;
   try {
-    const data = JSON.parse(raw!);
+    const data = JSON.parse(raw);
     const today = new Date().toISOString().split("T")[0];
     if (data.date !== today) return 0;
     return data.tools?.[toolId] || 0;
@@ -235,9 +212,11 @@ export function trackUsage(toolId: string): number {
   const raw = localStorage.getItem(USAGE_KEY);
   let data = { date: new Date().toISOString().split("T")[0], tools: {} as Record<string, number> };
   try {
-    const parsed = JSON.parse(raw!);
+    const parsed = JSON.parse(raw || "{}");
     if (parsed.date === data.date) data = parsed;
-  } catch {}
+  } catch {
+    // ignore malformed data
+  }
   data.tools[toolId] = (data.tools[toolId] || 0) + 1;
   localStorage.setItem(USAGE_KEY, JSON.stringify(data));
   return data.tools[toolId];

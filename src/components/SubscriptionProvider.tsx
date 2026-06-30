@@ -4,6 +4,7 @@ import { createContext, useContext, useState, useEffect, useCallback, type React
 import {
   getCurrentTier,
   setCurrentTier,
+  getTier,
   getUsage,
   trackUsage,
   getRemainingUses,
@@ -36,7 +37,24 @@ export function SubscriptionProvider({ children }: { children: ReactNode }) {
   const [, setTick] = useState(0);
 
   useEffect(() => {
-    setTierState(getCurrentTier());
+    const loadTier = async () => {
+      try {
+        const res = await fetch("/api/license/validate");
+        if (res.ok) {
+          const data = await res.json();
+          if (data.valid && data.tier) {
+            const t = getTier(data.tier);
+            setTierState(t);
+            setCurrentTier(data.tier);
+            return;
+          }
+        }
+      } catch {
+        // fallback to localStorage
+      }
+      setTierState(getCurrentTier());
+    };
+    loadTier();
   }, []);
 
   const setTier = useCallback((id: string) => {
@@ -48,6 +66,11 @@ export function SubscriptionProvider({ children }: { children: ReactNode }) {
   const usage = useCallback((toolId: string) => getUsage(toolId), [tier]);
   const track = useCallback((toolId: string) => {
     const n = trackUsage(toolId);
+    fetch("/api/license/track", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ toolId }),
+    }).catch(() => {});
     setTick((t) => t + 1);
     return n;
   }, []);

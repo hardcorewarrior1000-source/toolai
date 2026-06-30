@@ -8,10 +8,9 @@ import UpgradePrompt from "@/components/UpgradePrompt";
 interface ToolGateProps {
   toolId: string;
   children: ReactNode;
-  onUse?: () => void;
 }
 
-export default function ToolGate({ toolId, children, onUse }: ToolGateProps) {
+export default function ToolGate({ toolId, children }: ToolGateProps) {
   const { allowed } = useSubscription();
   const canProceed = allowed(toolId);
 
