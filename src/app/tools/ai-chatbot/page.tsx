@@ -27,14 +27,16 @@ const PROVIDERS: Record<Provider, ProviderConfig> = {
   openrouter: {
     name: "OpenRouter",
     models: [
+      { id: "meta-llama/llama-3.3-70b-instruct:free", name: "Llama 3.3 70B (Free)" },
       { id: "meta-llama/llama-3.2-3b-instruct:free", name: "Llama 3.2 3B (Free)" },
+      { id: "qwen/qwen3-coder:free", name: "Qwen3 Coder (Free)" },
+      { id: "qwen/qwen3-next-80b-a3b-instruct:free", name: "Qwen3 Next 80B (Free)" },
+      { id: "google/gemma-4-31b-it:free", name: "Gemma 4 31B (Free)" },
+      { id: "google/gemma-4-26b-a4b-it:free", name: "Gemma 4 26B (Free)" },
       { id: "nousresearch/hermes-3-llama-3.1-405b:free", name: "Hermes 3 405B (Free)" },
-      { id: "meta-llama/llama-3.1-8b-instruct:free", name: "Llama 3.1 8B (Free)" },
-      { id: "qwen/qwen-2.5-7b-instruct:free", name: "Qwen 2.5 7B (Free)" },
-      { id: "google/gemma-2-9b-it:free", name: "Gemma 2 9B (Free)" },
-      { id: "openai/gpt-4o-mini", name: "GPT-4o Mini (Paid)" },
-      { id: "openai/gpt-4o", name: "GPT-4o (Paid)" },
-      { id: "anthropic/claude-3-haiku", name: "Claude 3 Haiku (Paid)" },
+      { id: "nvidia/nemotron-3-super-120b-a12b:free", name: "Nemotron 3 Super (Free)" },
+      { id: "openai/gpt-oss-120b:free", name: "GPT-OSS 120B (Free)" },
+      { id: "openai/gpt-oss-20b:free", name: "GPT-OSS 20B (Free)" },
     ],
     placeholder: "sk-or-...",
     keyPrefix: "sk-or-",
@@ -77,7 +79,7 @@ const PROVIDERS: Record<Provider, ProviderConfig> = {
 export default function AIChatbotPage() {
   const [provider, setProvider] = useState<Provider>("openrouter");
   const [apiKey, setApiKey] = useState(DEFAULT_OPENROUTER_KEY);
-  const [model, setModel] = useState("meta-llama/llama-3.2-3b-instruct:free");
+  const [model, setModel] = useState("meta-llama/llama-3.3-70b-instruct:free");
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
