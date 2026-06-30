@@ -30,20 +30,20 @@ export const tiers: Tier[] = [
     priceLabel: "$0",
     description: "Get started with basic access to all tools.",
     features: [
-      "1,200 uses/day on all tools",
+      "500 uses/day on AI tools",
       "Basic tools unlimited",
       "Ad-supported",
       "Community support",
     ],
     limits: {
-      "ai-humanizer": 1200,
-      "ai-chatbot": 1200,
-      "color-palette": 1200,
-      "image-to-prompt": 1200,
-      "qr-generator": 1200,
-      "crypto-price-calculator": 1200,
-      "eth-gas-estimator": 1200,
-      "wallet-balance-checker": 1200,
+      "ai-humanizer": 500,
+      "ai-chatbot": 500,
+      "color-palette": 500,
+      "image-to-prompt": 500,
+      "qr-generator": 500,
+      "crypto-price-calculator": 500,
+      "eth-gas-estimator": 500,
+      "wallet-balance-checker": 500,
       ...ALL_UNLIMITED,
     },
     adsEnabled: true,
@@ -55,20 +55,20 @@ export const tiers: Tier[] = [
     priceLabel: "$5",
     description: "For regular users who want more usage and no ads.",
     features: [
-      "7,500 uses/day on all tools",
+      "2,500 uses/day on AI tools",
       "No ads",
       "Email support",
       "All tools included",
     ],
     limits: {
-      "ai-humanizer": 7500,
-      "ai-chatbot": 7500,
-      "color-palette": 7500,
-      "image-to-prompt": 7500,
-      "qr-generator": 7500,
-      "crypto-price-calculator": 7500,
-      "eth-gas-estimator": 7500,
-      "wallet-balance-checker": 7500,
+      "ai-humanizer": 2500,
+      "ai-chatbot": 2500,
+      "color-palette": 2500,
+      "image-to-prompt": 2500,
+      "qr-generator": 2500,
+      "crypto-price-calculator": 2500,
+      "eth-gas-estimator": 2500,
+      "wallet-balance-checker": 2500,
       ...ALL_UNLIMITED,
     },
     adsEnabled: false,
@@ -78,22 +78,22 @@ export const tiers: Tier[] = [
     name: "Pro",
     price: 15,
     priceLabel: "$15",
-    description: "For power users and freelancers who need unlimited access.",
+    description: "For power users who need more models and higher limits.",
     features: [
-      "Unlimited usage",
+      "5,000 uses/day on AI tools",
       "No ads",
       "Priority support",
-      "Early access to new tools",
+      "All AI chat models",
     ],
     limits: {
-      "ai-humanizer": "unlimited",
-      "ai-chatbot": "unlimited",
-      "color-palette": "unlimited",
-      "image-to-prompt": "unlimited",
-      "qr-generator": "unlimited",
-      "crypto-price-calculator": "unlimited",
-      "eth-gas-estimator": "unlimited",
-      "wallet-balance-checker": "unlimited",
+      "ai-humanizer": 5000,
+      "ai-chatbot": 5000,
+      "color-palette": 5000,
+      "image-to-prompt": 5000,
+      "qr-generator": 5000,
+      "crypto-price-calculator": 5000,
+      "eth-gas-estimator": 5000,
+      "wallet-balance-checker": 5000,
       ...ALL_UNLIMITED,
     },
     adsEnabled: false,
@@ -105,11 +105,11 @@ export const tiers: Tier[] = [
     priceLabel: "$45",
     description: "For developers and agencies who need API access and team features.",
     features: [
-      "Everything in Pro",
+      "Unlimited usage",
+      "No ads",
       "API access",
       "White-label embed codes",
       "Up to 5 team seats",
-      "Dedicated support",
     ],
     limits: {
       "ai-humanizer": "unlimited",
@@ -131,12 +131,11 @@ export const tiers: Tier[] = [
     priceLabel: "$99",
     description: "For companies that need custom branding and SLA guarantees.",
     features: [
-      "Everything in Business",
-      "Unlimited team seats",
+      "Unlimited everything",
+      "All AI models + priority",
       "Custom branding",
       "SLA guarantee",
-      "Dedicated account manager",
-      "Custom integrations",
+      "Dedicated support",
     ],
     limits: {
       "ai-humanizer": "unlimited",
@@ -162,25 +161,25 @@ export function getTierIndex(id: string): number {
   return idx >= 0 ? idx : 0;
 }
 
-const USAGE_KEY = "Zelve Tool AI_usage";
-const TIER_KEY = "Zelve Tool AI_tier";
+const USAGE_KEY = "toolai_usage";
+const TIER_KEY = "toolai_tier";
 
 export function getCurrentTier(): Tier {
   if (typeof window === "undefined") return tiers[0];
   const tierId = localStorage.getItem(TIER_KEY) || "free";
   const tier = getTier(tierId);
   if (tier.id !== "free") {
-    const licRaw = localStorage.getItem("Zelve Tool AI_license");
+    const licRaw = localStorage.getItem("toolai_license");
     if (licRaw) {
       try {
         const lic = JSON.parse(licRaw);
         if (new Date(lic.expiresAt) < new Date()) {
-          localStorage.removeItem("Zelve Tool AI_license");
+          localStorage.removeItem("toolai_license");
           localStorage.setItem(TIER_KEY, "free");
           return tiers[0];
         }
       } catch {
-        localStorage.removeItem("Zelve Tool AI_license");
+        localStorage.removeItem("toolai_license");
         localStorage.setItem(TIER_KEY, "free");
         return tiers[0];
       }
