@@ -5,8 +5,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import CookieConsent from "@/components/CookieConsent";
 import { SubscriptionProvider } from "@/components/SubscriptionProvider";
-import { LocaleProvider } from "@/i18n/provider";
-import { type Locale, isValidLocale, defaultLocale } from "@/i18n/config";
+import LocaleInit from "@/components/LocaleInit";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -53,17 +52,11 @@ export const metadata: Metadata = {
 
 const gaId = process.env.NEXT_PUBLIC_GA_ID;
 
-function getLocale(): Locale {
-  return defaultLocale;
-}
-
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const locale = getLocale();
-
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "WebSite",
@@ -79,7 +72,7 @@ export default function RootLayout({
 
   return (
     <html
-      lang={locale}
+      lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <head>
@@ -99,14 +92,14 @@ export default function RootLayout({
         />
       </head>
       <body className="min-h-full flex flex-col bg-zinc-950 text-zinc-100">
-        <LocaleProvider locale={locale}>
+        <LocaleInit>
           <SubscriptionProvider>
             <Header />
             <main className="flex-1">{children}</main>
             <Footer />
             <CookieConsent />
           </SubscriptionProvider>
-        </LocaleProvider>
+        </LocaleInit>
       </body>
     </html>
   );
