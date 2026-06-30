@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import InContentAd from "@/components/InContentAd";
 
 export const metadata: Metadata = {
   title: "Blog",
@@ -111,16 +112,19 @@ export default function BlogPage() {
       <h1 className="text-3xl font-bold text-white mb-8">Blog</h1>
 
       <div className="space-y-6">
-        {posts.map((post) => (
-          <article key={post.slug} className="bg-zinc-900 border border-zinc-800 rounded-xl p-6 hover:border-emerald-500/50 transition-colors">
-            <Link href={`/blog/${post.slug}`}>
-              <h2 className="text-xl font-semibold text-white hover:text-emerald-400 transition-colors mb-2">
-                {post.title}
-              </h2>
-            </Link>
-            <p className="text-zinc-400 text-sm mb-3">{post.excerpt}</p>
-            <time className="text-xs text-zinc-600">{post.date}</time>
-          </article>
+        {posts.map((post, i) => (
+          <div key={post.slug}>
+            <article className="bg-zinc-900 border border-zinc-800 rounded-xl p-6 hover:border-emerald-500/50 transition-colors">
+              <Link href={`/blog/${post.slug}`}>
+                <h2 className="text-xl font-semibold text-white hover:text-emerald-400 transition-colors mb-2">
+                  {post.title}
+                </h2>
+              </Link>
+              <p className="text-zinc-400 text-sm mb-3">{post.excerpt}</p>
+              <time className="text-xs text-zinc-600">{post.date}</time>
+            </article>
+            {(i === 3 || i === 7 || i === 11) && <InContentAd />}
+          </div>
         ))}
       </div>
     </div>

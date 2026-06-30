@@ -1,5 +1,8 @@
 "use client";
 
+import AdBanner from "@/components/AdBanner";
+import InContentAd from "@/components/InContentAd";
+
 import { useState } from "react";
 
 type Chain = "bitcoin" | "ethereum" | "solana";

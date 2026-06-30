@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import AdBanner from "@/components/AdBanner";
+import InContentAd from "@/components/InContentAd";
 import TipJar from "@/components/TipJar";
 
 interface ColorStop {
@@ -122,6 +123,10 @@ export default function GradientGeneratorPage() {
       </div>
 
       <AdBanner />
+      <InContentAd />
+
+      <AdBanner />
+
       <TipJar />
     </div>
   );

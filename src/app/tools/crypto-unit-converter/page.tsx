@@ -1,5 +1,8 @@
 "use client";
 
+import AdBanner from "@/components/AdBanner";
+import InContentAd from "@/components/InContentAd";
+
 import { useState, useEffect } from "react";
 
 type CryptoUnit = "btc" | "eth" | "sol";

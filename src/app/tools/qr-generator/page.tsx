@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef, type ChangeEvent } from "react";
 import QRCode from "qrcode";
 import AdBanner from "@/components/AdBanner";
+import InContentAd from "@/components/InContentAd";
 import TipJar from "@/components/TipJar";
 import ToolGate from "@/components/ToolGate";
 import { useSubscription } from "@/components/SubscriptionProvider";
@@ -125,6 +126,10 @@ export default function QRGeneratorPage() {
       )}
 
       <AdBanner />
+      <InContentAd />
+
+      <AdBanner />
+
       <TipJar />
     </div>
     </ToolGate>

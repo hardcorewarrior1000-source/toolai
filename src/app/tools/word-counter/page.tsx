@@ -2,6 +2,7 @@
 
 import { useState, type ChangeEvent } from "react";
 import AdBanner from "@/components/AdBanner";
+import InContentAd from "@/components/InContentAd";
 import TipJar from "@/components/TipJar";
 
 export default function WordCounterPage() {
@@ -54,6 +55,10 @@ export default function WordCounterPage() {
       </div>
 
       <AdBanner />
+      <InContentAd />
+
+      <AdBanner />
+
       <TipJar />
     </div>
   );

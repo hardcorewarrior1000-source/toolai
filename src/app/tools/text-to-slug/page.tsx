@@ -2,6 +2,7 @@
 
 import { useState, type ChangeEvent } from "react";
 import AdBanner from "@/components/AdBanner";
+import InContentAd from "@/components/InContentAd";
 import TipJar from "@/components/TipJar";
 
 export default function TextToSlugPage() {
@@ -85,6 +86,10 @@ export default function TextToSlugPage() {
       </div>
 
       <AdBanner />
+      <InContentAd />
+
+      <AdBanner />
+
       <TipJar />
     </div>
   );

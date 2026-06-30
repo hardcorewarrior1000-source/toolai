@@ -2,6 +2,7 @@
 
 import { useState, useRef, type ChangeEvent } from "react";
 import AdBanner from "@/components/AdBanner";
+import InContentAd from "@/components/InContentAd";
 import TipJar from "@/components/TipJar";
 import ToolGate from "@/components/ToolGate";
 import { useSubscription } from "@/components/SubscriptionProvider";
@@ -135,6 +136,10 @@ export default function ColorPalettePage() {
       </div>
 
       <AdBanner />
+      <InContentAd />
+
+      <AdBanner />
+
       <TipJar />
     </div>
     </ToolGate>

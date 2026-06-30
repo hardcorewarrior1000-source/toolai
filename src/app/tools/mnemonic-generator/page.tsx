@@ -1,5 +1,8 @@
 "use client";
 
+import AdBanner from "@/components/AdBanner";
+import InContentAd from "@/components/InContentAd";
+
 import { useState, useCallback } from "react";
 
 const BIP39_WORDLIST = [

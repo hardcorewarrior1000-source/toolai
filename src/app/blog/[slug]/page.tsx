@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import AdBanner from "@/components/AdBanner";
+import InContentAd from "@/components/InContentAd";
 
 const posts: Record<string, { title: string; date: string; content: string[] }> = {
   "how-to-humanize-ai-text": {
@@ -231,7 +232,10 @@ export default async function BlogPost(props: {
 
         <div className="space-y-4 text-zinc-300 leading-relaxed">
           {post.content.map((paragraph, i) => (
-            <p key={i}>{paragraph}</p>
+            <div key={i}>
+              <p>{paragraph}</p>
+              {i === 1 && <InContentAd />}
+            </div>
           ))}
         </div>
       </article>
