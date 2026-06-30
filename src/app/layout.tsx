@@ -22,14 +22,21 @@ export const metadata: Metadata = {
     template: "%s — Zelve Tool AI",
   },
   description:
-    "Free online AI-powered tools: AI humanizer, color palette generator, gradient generator, QR code generator, and more. No signup required.",
+    "Free online AI-powered tools: AI humanizer, color palette generator, gradient generator, QR code generator, crypto tools, and more. No signup required.",
   metadataBase: new URL("https://toolai.zelve.xyz"),
   openGraph: {
     title: "Zelve Tool AI — Free Online AI Tools",
     description:
-      "Free online AI-powered tools: AI humanizer, color palette generator, gradient generator, QR code generator, and more.",
+      "Free online AI-powered tools: AI humanizer, color palette generator, gradient generator, QR code generator, crypto tools, and more.",
     type: "website",
     url: "https://toolai.zelve.xyz",
+    siteName: "Zelve Tool AI",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Zelve Tool AI — Free Online AI Tools",
+    description:
+      "Free online AI-powered tools: AI humanizer, color palette generator, gradient generator, QR code generator, crypto tools, and more.",
   },
   keywords: [
     "AI tools",
@@ -56,7 +63,7 @@ export const metadata: Metadata = {
     follow: true,
   },
   verification: {
-    google: "YOUR_GOOGLE_SITE_VERIFICATION",
+    google: "TO7QzwDVoKUHbAoYmk68ZbdSo-7lOHDOzf0tEBE9RFc",
   },
 };
 
@@ -67,6 +74,19 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    name: "Zelve Tool AI",
+    url: "https://toolai.zelve.xyz",
+    description: "Free online AI-powered tools for developers, creators, and crypto enthusiasts.",
+    potentialAction: {
+      "@type": "SearchAction",
+      target: "https://toolai.zelve.xyz/tools?q={search_term_string}",
+      "query-input": "required name=search_term_string",
+    },
+  };
+
   return (
     <html
       lang="en"
@@ -83,6 +103,10 @@ export default function RootLayout({
             />
           </>
         )}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
       </head>
       <body className="min-h-full flex flex-col bg-zinc-950 text-zinc-100">
         <SubscriptionProvider>
