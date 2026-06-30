@@ -63,7 +63,7 @@ export default function Header() {
           <Link href="/" onClick={() => setOpen(false)} className="hover:text-white px-3 py-2 rounded-lg hover:bg-zinc-900/50">{t.common.home}</Link>
 
           <p className="text-[10px] uppercase tracking-wider text-zinc-600 font-medium px-3 pt-3 pb-1">AI &amp; Creative</p>
-          <Link href="/tools/ai-chatbot" onClick={() => setOpen(false)} className="hover:text-white px-3 py-2 rounded-lg hover:bg-zinc-900/50">AI Chatbot</Link>
+          <Link href="/tools/ai-chatbot" onClick={() => setOpen(false)} className="hover:text-white px-3 py-2 rounded-lg hover:bg-zinc-900/50">AI Chat</Link>
           <Link href="/tools/ai-humanizer" onClick={() => setOpen(false)} className="hover:text-white px-3 py-2 rounded-lg hover:bg-zinc-900/50">AI Humanizer</Link>
           <Link href="/tools/color-palette" onClick={() => setOpen(false)} className="hover:text-white px-3 py-2 rounded-lg hover:bg-zinc-900/50">Color Palette</Link>
           <Link href="/tools/gradient-generator" onClick={() => setOpen(false)} className="hover:text-white px-3 py-2 rounded-lg hover:bg-zinc-900/50">Gradient Generator</Link>
