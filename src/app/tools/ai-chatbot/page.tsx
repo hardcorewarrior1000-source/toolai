@@ -373,7 +373,7 @@ export default function AIChatbotPage() {
                 {msg.role === "assistant" && i > 0 && (
                   <div className="flex items-center gap-2 mb-2 text-[10px] text-zinc-500">
                     <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
-                    {config.name} \u00B7 {config.models.find((m) => m.id === model)?.name || model}
+                    {config.name} · {config.models.find((m) => m.id === model)?.name || model}
                   </div>
                 )}
                 <div className="whitespace-pre-wrap">{msg.content || (loading && i === messages.length - 1 ? <span className="animate-pulse">{"\u25CF"}</span> : "")}</div>

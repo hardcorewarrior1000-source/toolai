@@ -302,7 +302,7 @@ export default function AIHumanizerPage() {
                     {diff.map((d, i) => (
                       <div key={i} className="text-sm">
                         <span className="text-red-400 line-through">{d.original}</span>
-                        <span className="text-zinc-600 mx-1">\u2192</span>
+                        <span className="text-zinc-600 mx-1">→</span>
                         <span className="text-emerald-400">{d.humanized}</span>
                       </div>
                     ))}
@@ -353,7 +353,7 @@ export default function AIHumanizerPage() {
               <div className="text-xs text-zinc-500 mb-1">Words</div>
               <div className="text-sm font-medium">
                 <span className="text-zinc-400">{inputStats.words}</span>
-                <span className="text-zinc-600 mx-1">\u2192</span>
+                <span className="text-zinc-600 mx-1">→</span>
                 <span className="text-emerald-400">{outputStats.words}</span>
               </div>
             </div>
@@ -361,7 +361,7 @@ export default function AIHumanizerPage() {
               <div className="text-xs text-zinc-500 mb-1">Characters</div>
               <div className="text-sm font-medium">
                 <span className="text-zinc-400">{inputStats.chars}</span>
-                <span className="text-zinc-600 mx-1">\u2192</span>
+                <span className="text-zinc-600 mx-1">→</span>
                 <span className="text-emerald-400">{outputStats.chars}</span>
               </div>
             </div>
@@ -369,7 +369,7 @@ export default function AIHumanizerPage() {
               <div className="text-xs text-zinc-500 mb-1">Sentences</div>
               <div className="text-sm font-medium">
                 <span className="text-zinc-400">{inputStats.sentences}</span>
-                <span className="text-zinc-600 mx-1">\u2192</span>
+                <span className="text-zinc-600 mx-1">→</span>
                 <span className="text-emerald-400">{outputStats.sentences}</span>
               </div>
             </div>
@@ -377,7 +377,7 @@ export default function AIHumanizerPage() {
               <div className="text-xs text-zinc-500 mb-1">Reading Time</div>
               <div className="text-sm font-medium">
                 <span className="text-zinc-400">{inputStats.readingTime}</span>
-                <span className="text-zinc-600 mx-1">\u2192</span>
+                <span className="text-zinc-600 mx-1">→</span>
                 <span className="text-emerald-400">{outputStats.readingTime}</span>
               </div>
             </div>
@@ -390,7 +390,7 @@ export default function AIHumanizerPage() {
             <ul className="text-xs text-zinc-500 space-y-1 list-disc list-inside">
               <li>Removed AI-specific phrases like &quot;as an AI&quot;, &quot;I cannot emphasize&quot;</li>
               <li>Replaced formal words with casual alternatives</li>
-              <li>Added contractions (I am \u2192 I&apos;m, cannot \u2192 can&apos;t)</li>
+              <li>Added contractions (I am → I&apos;m, cannot → can&apos;t)</li>
               {strength >= 2 && <li>Inserted natural discourse markers</li>}
               {strength >= 3 && <li>Added conversational fillers for a casual tone</li>}
               {strength >= 4 && <li>Restructured sentences and simplified complex phrasing</li>}

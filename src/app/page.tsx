@@ -76,7 +76,7 @@ export default function Home() {
               href="/tools/crypto-price-calculator"
               className="px-6 py-3 bg-zinc-800 hover:bg-zinc-700 text-zinc-300 border border-zinc-700 hover:border-zinc-600 rounded-lg font-medium transition-all duration-300 hover:scale-105"
             >
-              Crypto Prices \u2192
+              Crypto Prices →
             </Link>
           </div>
 
@@ -102,7 +102,7 @@ export default function Home() {
               <p className="text-sm text-zinc-500">Transform text, images, and designs</p>
             </div>
           </div>
-          <Link href="/tools/ai-humanizer" className="text-xs text-emerald-400 hover:text-emerald-300 transition-colors">View all {aiTools.length} \u2192</Link>
+          <Link href="/tools/ai-humanizer" className="text-xs text-emerald-400 hover:text-emerald-300 transition-colors">View all {aiTools.length} →</Link>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
           {aiTools.map((tool, i) => (
@@ -124,7 +124,7 @@ export default function Home() {
               <p className="text-sm text-zinc-500">Essential utilities for building software</p>
             </div>
           </div>
-          <Link href="/tools/password-generator" className="text-xs text-emerald-400 hover:text-emerald-300 transition-colors">View all {devTools.length} \u2192</Link>
+          <Link href="/tools/password-generator" className="text-xs text-emerald-400 hover:text-emerald-300 transition-colors">View all {devTools.length} →</Link>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
           {devTools.map((tool, i) => (
@@ -146,7 +146,7 @@ export default function Home() {
               <p className="text-sm text-zinc-500">On-chain data, converters, and utilities</p>
             </div>
           </div>
-          <Link href="/tools/crypto-price-calculator" className="text-xs text-emerald-400 hover:text-emerald-300 transition-colors">View all {cryptoTools.length} \u2192</Link>
+          <Link href="/tools/crypto-price-calculator" className="text-xs text-emerald-400 hover:text-emerald-300 transition-colors">View all {cryptoTools.length} →</Link>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
           {cryptoTools.map((tool, i) => (

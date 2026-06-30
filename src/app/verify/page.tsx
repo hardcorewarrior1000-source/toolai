@@ -212,7 +212,7 @@ export default function VerifyPage() {
               </p>
               {result.amount && result.usdValue !== undefined && (
                 <p className="text-zinc-500 text-xs mb-2">
-                  Detected: {result.amount} {WALLETS[chain].label} \u2248 ${result.usdValue.toFixed(2)} USD
+                  Detected: {result.amount} {WALLETS[chain].label} ≈ ${result.usdValue.toFixed(2)} USD
                 </p>
               )}
               {license && (
