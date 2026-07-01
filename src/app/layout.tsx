@@ -126,6 +126,7 @@ export default function RootLayout({
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
+        <script async src="https://startupbar.co/widget/loader.js" data-startup-id="189c76ca-7db5-4c0a-9613-5e6d1cb4ff8c" />
       </head>
       <body className="min-h-full flex flex-col bg-zinc-950 text-zinc-100">
         <LocaleInit>
